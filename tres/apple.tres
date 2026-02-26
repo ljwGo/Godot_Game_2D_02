@@ -1,0 +1,8 @@
+[gd_resource type="AtlasTexture" load_steps=2 format=3 uid="uid://b8sntryfkmans"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_w5eia"]
+load_path = "res://.godot/imported/Basic Grass Biom things 1.png-5bc7085845e58a1f53cc342c925cd9bd.ctex"
+
+[resource]
+atlas = SubResource("CompressedTexture2D_w5eia")
+region = Rect2(32, 32, 16, 16)

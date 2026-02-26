@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://px1v57118urs"]
+
+[ext_resource type="PackedScene" uid="uid://bvkoxe4tofg5o" path="res://scene/loot.tscn" id="1_6jrnk"]
+[ext_resource type="Texture2D" uid="uid://b8sntryfkmans" path="res://tres/apple.tres" id="2_pdq0d"]
+
+[node name="Loot" instance=ExtResource("1_6jrnk")]
+
+[node name="Sprite2D" parent="." index="1"]
+texture = ExtResource("2_pdq0d")

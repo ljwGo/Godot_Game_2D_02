@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=4 uid="uid://dn12qx157vwif"]
+
+[ext_resource type="Script" uid="uid://dgic41u4yp4su" path="res://scripts/House.cs" id="1_ae14o"]
+[ext_resource type="TileSet" uid="uid://djqf4e01drkkn" path="res://tres/house.tres" id="2_3bjdp"]
+[ext_resource type="Script" uid="uid://bm8c2enkt7r1j" path="res://scripts/Door.cs" id="3_52fq0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b8pkg"]
+size = Vector2(20, 16)
+
+[node name="House01" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_ae14o")
+
+[node name="Wall" type="TileMapLayer" parent="."]
+y_sort_enabled = true
+tile_map_data = PackedByteArray("AAD8//r/AAAAAAEAAAD8//v/AAAAAAIAAAD8//z/AAAAAAIAAAD8//3/AAAAAAIAAAD8//7/AAAAAAIAAAD8////AAAAAAMAAAD9//r/AAABAAEAAAD9////AAABAAMAAAD+//r/AAABAAEAAAD+////AAABAAAAAAD///r/AAABAAEAAAD/////AAABAAMAAAAAAPr/AAABAAEAAAAAAP//AAADAAEAAAABAPr/AAABAAEAAAABAP//AAABAAMAAAACAPr/AAABAAEAAAACAP//AAABAAMAAAADAPr/AAACAAEAAAADAPv/AAACAAIAAAADAPz/AAACAAIAAAADAP3/AAACAAIAAAADAP7/AAACAAIAAAADAP//AAACAAMAAAA=")
+tile_set = ExtResource("2_3bjdp")
+
+[node name="Roof" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray("AAD8//n/AAAEAAAAAAD8//r/AAAEAAEAAAD8//v/AAAEAAEAAAD8//z/AAAEAAIAAAD8//3/AAAEAAMAAAD8//7/AAAEAAMAAAD8////AAAEAAQAAAD9//n/AAAFAAAAAAD9//r/AAAFAAEAAAD9//v/AAAFAAEAAAD9//z/AAAFAAIAAAD9//3/AAAFAAMAAAD9//7/AAAFAAMAAAD9////AAAFAAQAAAD+//n/AAAFAAAAAAD+//r/AAAFAAEAAAD+//v/AAAFAAEAAAD+//z/AAAFAAIAAAD+//3/AAAFAAMAAAD+//7/AAAFAAMAAAD+////AAAFAAQAAAD///n/AAAFAAAAAAD///r/AAAFAAEAAAD///v/AAAFAAEAAAD///z/AAAFAAIAAAD///3/AAAFAAMAAAD///7/AAAFAAMAAAD/////AAAFAAQAAAAAAPn/AAAFAAAAAAAAAPr/AAAFAAEAAAAAAPv/AAAFAAEAAAAAAPz/AAAFAAIAAAAAAP3/AAAFAAMAAAAAAP7/AAAFAAMAAAAAAP//AAAFAAQAAAABAPn/AAAFAAAAAAABAPr/AAAFAAEAAAABAPv/AAAFAAEAAAABAPz/AAAFAAIAAAABAP3/AAAFAAMAAAABAP7/AAAFAAMAAAABAP//AAAFAAQAAAACAPn/AAAFAAAAAAACAPr/AAAFAAEAAAACAPv/AAAFAAEAAAACAPz/AAAFAAIAAAACAP3/AAAFAAMAAAACAP7/AAAFAAMAAAACAP//AAAFAAQAAAADAPn/AAAGAAAAAAADAPr/AAAGAAEAAAADAPv/AAAGAAEAAAADAPz/AAAGAAIAAAADAP3/AAAGAAMAAAADAP7/AAAGAAMAAAADAP//AAAGAAQAAAA=")
+tile_set = ExtResource("2_3bjdp")
+
+[node name="Door" type="Area2D" parent="."]
+position = Vector2(8, -5)
+collision_layer = 24
+script = ExtResource("3_52fq0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Door"]
+position = Vector2(0, -2)
+scale = Vector2(0.5, 0.5)
+shape = SubResource("RectangleShape2D_b8pkg")
+
+[connection signal="Exited" from="Door" to="." method="OnDoorExited"]

@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=4 uid="uid://xh6n3s2actkj"]
+
+[ext_resource type="PackedScene" uid="uid://63x245wawif3" path="res://scene/tree.tscn" id="1_7rsuu"]
+[ext_resource type="PackedScene" uid="uid://djokncm6nma0o" path="res://scene/wood.tscn" id="2_jpmvm"]
+[ext_resource type="Script" uid="uid://b5o0k3lowpuwg" path="res://resource/LootItemParam.cs" id="3_js6wd"]
+
+[sub_resource type="Resource" id="Resource_jpmvm"]
+script = ExtResource("3_js6wd")
+lootScene = ExtResource("2_jpmvm")
+quantity = 6
+stackSize = 3
+metadata/_custom_type_script = "uid://b5o0k3lowpuwg"
+
+[node name="BigGreenTree" instance=ExtResource("1_7rsuu")]
+tile_map_data = PackedByteArray("AAD/////AAAGAAEAAAD//wAAAAAGAAIAAAAAAP//AAAHAAEAAAAAAAAAAAAHAAIAAAD///7/AAAGAAAAAAAAAP7/AAAHAAAAAAABAP7/AAAIAAAAAAABAP//AAAIAAEAAAABAAAAAAAIAAIAAAA=")
+
+[node name="Cuttable" parent="." index="1"]
+TotalChopPower = 6.0
+
+[node name="LootDroppable" parent="." index="2"]
+lootItems = Array[Object]([SubResource("Resource_jpmvm")])

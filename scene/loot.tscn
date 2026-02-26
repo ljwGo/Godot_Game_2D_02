@@ -1,0 +1,44 @@
+[gd_scene load_steps=9 format=3 uid="uid://bvkoxe4tofg5o"]
+
+[ext_resource type="Script" uid="uid://1igmi47auvn0" path="res://scripts/Loot.cs" id="1_23e8t"]
+[ext_resource type="Script" uid="uid://yvo3nii1fd5s" path="res://scripts/LootDrop.cs" id="2_yf1g1"]
+[ext_resource type="Script" uid="uid://ck422myadl42d" path="res://scripts/Absorbable.cs" id="3_yf1g1"]
+[ext_resource type="Script" uid="uid://bi6r1wr6fkypc" path="res://scripts/InventoryItem.cs" id="4_mqwdb"]
+[ext_resource type="Script" uid="uid://cdk81a28sfvsc" path="res://scripts/Stackable.cs" id="5_8le75"]
+[ext_resource type="Texture2D" uid="uid://dm2ugkjjprjva" path="res://assets/Sprout Lands - Sprites - Basic pack/Objects/Basic tools and meterials.png" id="5_wgbbi"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_23e8t"]
+atlas = ExtResource("5_wgbbi")
+region = Rect2(32, 16, 16, 16)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_vqwuo"]
+
+[node name="Loot" type="Node2D"]
+script = ExtResource("1_23e8t")
+
+[node name="Shadow" type="Sprite2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_23e8t")
+
+[node name="LootDrop" type="Node" parent="."]
+script = ExtResource("2_yf1g1")
+
+[node name="InventoryItem" type="Node" parent="."]
+script = ExtResource("4_mqwdb")
+
+[node name="Stackable" type="Node" parent="."]
+script = ExtResource("5_8le75")
+
+[node name="Absorbable" type="Area2D" parent="."]
+process_mode = 4
+collision_layer = 32
+script = ExtResource("3_yf1g1")
+absorbSpeed = 3.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Absorbable"]
+shape = SubResource("CircleShape2D_vqwuo")
+
+[connection signal="DropFinished" from="LootDrop" to="." method="OnLootDropFinished"]
+[connection signal="AbsorbFinished" from="Absorbable" to="." method="OnAbsorbFinished"]
+[connection signal="MayStartAbsorb" from="Absorbable" to="." method="OnMayStartAbsorb"]

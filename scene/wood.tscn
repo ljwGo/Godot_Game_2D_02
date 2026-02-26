@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://djokncm6nma0o"]
+
+[ext_resource type="PackedScene" uid="uid://bvkoxe4tofg5o" path="res://scene/loot.tscn" id="1_v4yek"]
+
+[node name="Loot" instance=ExtResource("1_v4yek")]
+
+[node name="InventoryItem" parent="." index="3"]
+itemName = "wood"

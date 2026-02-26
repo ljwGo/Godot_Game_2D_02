@@ -1,0 +1,44 @@
+[gd_scene load_steps=10 format=3 uid="uid://63x245wawif3"]
+
+[ext_resource type="TileSet" uid="uid://dhqaif145cvg0" path="res://tres/plant.tres" id="1_du0sk"]
+[ext_resource type="Script" uid="uid://lhdtf7wmt0pp" path="res://scripts/Tree.cs" id="2_epk0a"]
+[ext_resource type="Script" uid="uid://ehkdg5vdn8d6" path="res://scripts/Interactive.cs" id="2_rqtsi"]
+[ext_resource type="Script" uid="uid://cjb66ay6aen6" path="res://scripts/Cuttable.cs" id="3_epk0a"]
+[ext_resource type="Script" uid="uid://cxo1l7lsfrc88" path="res://scripts/LootDroppable.cs" id="4_rqtsi"]
+[ext_resource type="PackedScene" uid="uid://djokncm6nma0o" path="res://scene/wood.tscn" id="6_acer2"]
+[ext_resource type="Script" uid="uid://b5o0k3lowpuwg" path="res://resource/LootItemParam.cs" id="7_i73dq"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_aooep"]
+radius = 17.0
+
+[sub_resource type="Resource" id="Resource_ebvvg"]
+script = ExtResource("7_i73dq")
+lootScene = ExtResource("6_acer2")
+quantity = 3
+stackSize = 3
+metadata/_custom_type_script = "uid://b5o0k3lowpuwg"
+
+[node name="Tree" type="TileMapLayer"]
+tile_map_data = PackedByteArray(0, 0, 255, 255, 255, 255, 0, 0, 4, 0, 1, 0, 0, 0, 255, 255, 0, 0, 0, 0, 4, 0, 2, 0, 0, 0, 0, 0, 255, 255, 0, 0, 5, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 2, 0, 0, 0)
+tile_set = ExtResource("1_du0sk")
+script = ExtResource("2_epk0a")
+
+[node name="Interactive" type="Area2D" parent="."]
+collision_layer = 4
+script = ExtResource("2_rqtsi")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactive"]
+position = Vector2(0, -9)
+shape = SubResource("CircleShape2D_aooep")
+
+[node name="Cuttable" type="Node" parent="."]
+script = ExtResource("3_epk0a")
+
+[node name="LootDroppable" type="Node" parent="."]
+script = ExtResource("4_rqtsi")
+lootItems = Array[Object]([SubResource("Resource_ebvvg")])
+minDropRadius = 12.0
+maxDropRadius = 24.0
+duration = 0.8
+
+[connection signal="Chopped" from="Cuttable" to="." method="OnTreeChopped"]

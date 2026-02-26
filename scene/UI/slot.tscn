@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://cnm5m1d8q7ood"]
+
+[ext_resource type="Texture2D" uid="uid://c1r1dfp5t285f" path="res://tres/UI/inventory.tres" id="1_gfg8l"]
+[ext_resource type="PackedScene" uid="uid://dfhw64rvv6p7k" path="res://scene/UI/tile.tscn" id="2_i3rv0"]
+
+[sub_resource type="Theme" id="Theme_swljk"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gfg8l"]
+atlas = ExtResource("1_gfg8l")
+region = Rect2(57, 57, 30, 32)
+
+[node name="Slot" type="TextureRect"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -15.0
+offset_top = -16.0
+offset_right = 15.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+theme = SubResource("Theme_swljk")
+texture = SubResource("AtlasTexture_gfg8l")
+
+[node name="Tile" parent="." instance=ExtResource("2_i3rv0")]
+layout_mode = 1
