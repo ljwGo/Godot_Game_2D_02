@@ -6,3 +6,6 @@
 
 [node name="InventoryItem" parent="." index="3"]
 itemName = "wood"
+
+[node name="Stackable" parent="." index="4"]
+maxStackSize = 4

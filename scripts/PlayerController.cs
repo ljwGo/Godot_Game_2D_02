@@ -127,5 +127,11 @@ namespace Game
 
 			mainInventory.UpdateSlot(index, item);
 		}
+
+		public void OnInventoryFull(InventoryItem item)
+		{
+			// 这里可以显示一个提示，告诉玩家背包满了
+			GD.Print("Cannot add " + item.itemName + " to inventory: Inventory is full!");
+		}
 	}
 }

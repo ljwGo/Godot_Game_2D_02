@@ -6,9 +6,10 @@ namespace Game
 {
 	public partial class Inventory : Node
 	{
-		[Export] public uint capacity = 12;
+		[Export] public uint capacity = 3;
 
 		[Signal] public delegate void ItemChangeEventHandler(int index, InventoryItem item);
+		[Signal] public delegate void InventoryFullEventHandler(InventoryItem item);
 
 		private InventoryItem[] items = [];
 
@@ -61,25 +62,23 @@ namespace Game
 			}
 
 			// 如果可堆叠，计算当前背包中同类物品的剩余空间 + 空格数 * 最大堆叠量
-			uint totalAvailableSpace = 0;
 			for (int i = 0; i < capacity; i++)
 			{
 				if (items[i] == null)
 				{
-					totalAvailableSpace += stackable.maxStackSize;
+					addQuantity = stackable.currentStackSize;
 				}
 				else if (items[i].itemName == item.itemName)
 				{
 					Stackable otherStack = GetStackableComponent(items[i]);
-					if (otherStack != null)
+					if (otherStack != null && stackable.CanStackWith(otherStack))
 					{
-						totalAvailableSpace += otherStack.maxStackSize - otherStack.currentStackSize;
+						addQuantity = Math.Min(otherStack.GetRemainderSpace(), stackable.currentStackSize);
 					}
 				}
 			}
 
-			addQuantity = totalAvailableSpace;
-			return totalAvailableSpace > 0;
+			return addQuantity > 0;
 		}
 
 		#endregion
@@ -153,7 +152,8 @@ namespace Game
 					}
 					else
 					{
-						// Todo: 背包满了，无法添加
+						// 背包满了，无法添加
+						EmitSignal(SignalName.InventoryFull, item);
 						return;
 					}
 				}
@@ -185,7 +185,8 @@ namespace Game
 					}
 					else
 					{
-						// Todo: 背包满了，无法添加
+						// 背包满了，无法添加
+						EmitSignal(SignalName.InventoryFull, item);
 						return;
 					}
 				}
@@ -244,7 +245,7 @@ namespace Game
 					if (items[i] != null && items[i].itemName == item.itemName)
 					{
 						Stackable existingStack = GetStackableComponent(items[i]);
-						if (existingStack != null && incomingStack.CanStackWith(existingStack))
+						if (existingStack != null && existingStack.CanStackWith(incomingStack))
 						{
 							return i; // 找到可堆叠的目标
 						}

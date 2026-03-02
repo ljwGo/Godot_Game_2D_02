@@ -66,30 +66,8 @@ namespace Game
 		{
 			if (area is Absorber absorber)
 			{
-				SetTarget(absorber);
-				canAbsorbCheckTimer = new Timer
-				{
-					WaitTime = 0.1f,
-					OneShot = true
-				};
-				canAbsorbCheckTimer.Timeout += () =>
-				{
-					if (IsInstanceValid(absorber) && IsInstanceValid(this))
-					{
-						EmitSignal(SignalName.MayStartAbsorb, absorber, this);
-						// 通过isAbsorbing来回传是否已经开始吸收
-						if (isAbsorbing)
-						{
-							if (IsInstanceValid(canAbsorbCheckTimer))
-							{
-								canAbsorbCheckTimer.Stop();
-								canAbsorbCheckTimer.QueueFree();
-							}
-						}
-					}
-				};
-				AddChild(canAbsorbCheckTimer);
-				canAbsorbCheckTimer.Start();
+				EmitSignal(SignalName.MayStartAbsorb, absorber, this);
+				StartCanAbsorbCheck(absorber);
 			}
 		}
 
@@ -98,12 +76,46 @@ namespace Game
 			if (area is Absorber)
 			{
 				SetTarget(null);
-				if (IsInstanceValid(canAbsorbCheckTimer))
+				if (canAbsorbCheckTimer != null && IsInstanceValid(canAbsorbCheckTimer))
 				{
 					canAbsorbCheckTimer.Stop();
 					canAbsorbCheckTimer.QueueFree();
 				}
 			}
+		}
+
+		public void StartCanAbsorbCheck(Absorber absorber)
+		{
+			if (canAbsorbCheckTimer != null && IsInstanceValid(canAbsorbCheckTimer))
+			{
+				canAbsorbCheckTimer.Stop();
+				canAbsorbCheckTimer.QueueFree();
+			}
+
+			SetTarget(absorber);
+			canAbsorbCheckTimer = new Timer
+			{
+				WaitTime = 0.5f,
+				OneShot = true
+			};
+			canAbsorbCheckTimer.Timeout += () =>
+			{
+				if (IsInstanceValid(absorber) && IsInstanceValid(this))
+				{
+					EmitSignal(SignalName.MayStartAbsorb, absorber, this);
+					// 通过isAbsorbing来回传是否已经开始吸收
+					if (isAbsorbing)
+					{
+						if (IsInstanceValid(canAbsorbCheckTimer))
+						{
+							canAbsorbCheckTimer.Stop();
+							canAbsorbCheckTimer.QueueFree();
+						}
+					}
+				}
+			};
+			AddChild(canAbsorbCheckTimer);
+			canAbsorbCheckTimer.Start();
 		}
 	}
 }

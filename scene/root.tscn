@@ -87,7 +87,7 @@ size_flags_vertical = 8
 theme_override_styles/panel = SubResource("StyleBoxTexture_5b5uq")
 script = ExtResource("9_ax07c")
 slotScene = ExtResource("8_swljk")
-size = 12
+size = 2
 
 [node name="Slots" type="HBoxContainer" parent="CanvasLayer/Control/UI/MainInventory"]
 layout_mode = 2

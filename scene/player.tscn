@@ -285,7 +285,9 @@ ChopRange = 20.0
 
 [node name="Inventory" type="Node" parent="."]
 script = ExtResource("7_hp4bs")
+capacity = 2
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="Faller" method="OnAnimationFinished"]
 [connection signal="Interact" from="Interactor" to="." method="OnInteractStart"]
+[connection signal="InventoryFull" from="Inventory" to="." method="OnInventoryFull"]
 [connection signal="ItemChange" from="Inventory" to="." method="OnInventoryItemChange"]

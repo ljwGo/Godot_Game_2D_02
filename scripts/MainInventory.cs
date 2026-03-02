@@ -6,7 +6,6 @@ namespace Game
 	public partial class MainInventory : PanelContainer
 	{
 		[Export] public PackedScene slotScene;
-		[Export] public PackedScene tileScene;
 		[Export] public uint size;
 		HBoxContainer slotsContainer;
 

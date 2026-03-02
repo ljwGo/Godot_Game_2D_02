@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Godot;
 
 namespace Game
@@ -21,9 +22,22 @@ namespace Game
 		{
 			Inventory inventory = absorber.GetParent().GetNodeOrNull<Inventory>("Inventory");
 			InventoryItem item = absorbable.GetParent().GetNodeOrNull<InventoryItem>("InventoryItem");
-			if (inventory != null && item != null && inventory.CanAddItem(item, out uint canAddCount))
+			if (inventory != null && item != null)
 			{
-				inventory.AddItemRecursive(item);
+				if (inventory.CanAddItem(item, out uint canAddCount))
+				{
+					inventory.AddItemRecursive(item);
+				}
+				else
+				{
+					// Todo: 重新开启是否可吸收判定
+					// await ToSignal(GetTree().CreateTimer(2f), "timeout");
+					// absorbable.StartCanAbsorbCheck(absorber);
+				}
+			}
+			else
+			{
+				GD.PrintErr("Failed to get inventory or item reference when absorb finished!");
 			}
 		}
 
