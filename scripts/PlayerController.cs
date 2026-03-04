@@ -12,11 +12,13 @@ namespace Game
 
 		AnimatedSprite2D _animatedSprite;
 		MainInventory mainInventory;
+		Area2D interactPoint;
 
 		public override void _Ready()
 		{
 			_animatedSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 			mainInventory = GetNodeOrNull<MainInventory>("%MainInventory");
+			interactPoint = GetNode<Area2D>("InteractPoint");
 		}
 
 		public override void _PhysicsProcess(double delta)

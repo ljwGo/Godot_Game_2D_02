@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://du5eumro16dyo"]
+[gd_scene load_steps=39 format=3 uid="uid://du5eumro16dyo"]
 
 [ext_resource type="Script" uid="uid://d3dsh0bxfvvpe" path="res://scripts/PlayerController.cs" id="1_hjaqi"]
 [ext_resource type="Texture2D" uid="uid://m5i0b03chhn0" path="res://assets/Sprout Sorry pack/Tests/teemo 8 directions.png" id="1_xo3ru"]
@@ -7,6 +7,8 @@
 [ext_resource type="Script" uid="uid://d0m7jwrok1mms" path="res://scripts/Absorber.cs" id="5_oh5ij"]
 [ext_resource type="Script" uid="uid://pgl2a1qx563s" path="res://scripts/Faller.cs" id="5_s4jxa"]
 [ext_resource type="Script" uid="uid://b1lshb0ysr5lh" path="res://scripts/Inventory.cs" id="7_hp4bs"]
+[ext_resource type="Script" uid="uid://kswou03obsn3" path="res://scripts/Farmer.cs" id="8_g2vtq"]
+[ext_resource type="Script" uid="uid://q2xhhej6e6b" path="res://scripts/InteractPoint.cs" id="9_2fvbb"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xo3ru"]
 radius = 6.0
@@ -248,6 +250,9 @@ radius = 12.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_s4jxa"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_2fvbb"]
+radius = 2.0
+
 [node name="CharacterBody2D" type="CharacterBody2D"]
 collision_mask = 28
 script = ExtResource("1_hjaqi")
@@ -285,7 +290,18 @@ ChopRange = 20.0
 
 [node name="Inventory" type="Node" parent="."]
 script = ExtResource("7_hp4bs")
-capacity = 2
+capacity = 12
+
+[node name="Farmer" type="Node2D" parent="."]
+script = ExtResource("8_g2vtq")
+
+[node name="InteractPoint" type="Area2D" parent="."]
+position = Vector2(0, -7)
+script = ExtResource("9_2fvbb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractPoint"]
+position = Vector2(0, 11)
+shape = SubResource("CircleShape2D_2fvbb")
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="Faller" method="OnAnimationFinished"]
 [connection signal="Interact" from="Interactor" to="." method="OnInteractStart"]
