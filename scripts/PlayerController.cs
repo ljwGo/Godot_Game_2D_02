@@ -1,4 +1,5 @@
 using System;
+using System.Data.Common;
 using Godot;
 
 namespace Game
@@ -28,6 +29,7 @@ namespace Game
 
 			HandleMovement(fDelta);
 			ApplyAnimation();
+			MakeInteractPointDirection();
 
 			// 执行物理移动
 			MoveAndSlide();
@@ -40,14 +42,37 @@ namespace Game
 
 		public void OnInteractStart(InteractEventHandlerParams @params, Interactor interactor)
 		{
-			foreach (var interactive in @params.interactivesInRange)
+			// foreach (var interactive in @params.interactivesInRange)
+			// {
+			// 	var interactiveParent = interactive.GetParent();
+			// 	var interactorParent = interactor.GetParent();
+			// 	if (interactiveParent != null && interactorParent != null)
+			// 	{
+			// 		// 伐木
+			// 		MayDoChop(@params, interactor);
+			// 	}
+			// }
+			MayDoPlow(@params, interactor);
+		}
+
+		private void MakeInteractPointDirection()
+		{
+			string currentAnimation = _animatedSprite.Animation;
+			if (currentAnimation.EndsWith("Down"))
 			{
-				var interactiveParent = interactive.GetParent();
-				var interactorParent = interactor.GetParent();
-				if (interactiveParent != null && interactorParent != null)
-				{
-					MayDoChop(@params, interactor);
-				}
+				interactPoint.Rotation = 0;
+			}
+			else if (currentAnimation.EndsWith("Up"))
+			{
+				interactPoint.Rotation = Mathf.Pi;
+			}
+			else if (currentAnimation.EndsWith("Left"))
+			{
+				interactPoint.Rotation = Mathf.Pi / 2;
+			}
+			else if (currentAnimation.EndsWith("Right"))
+			{
+				interactPoint.Rotation = -Mathf.Pi / 2;
 			}
 		}
 
@@ -120,6 +145,17 @@ namespace Game
 					faller.MayPlayChopAnimation(cuttable);
 				}
 			}
+		}
+
+		private void MayDoPlow(InteractEventHandlerParams @params, Interactor interactor)
+		{
+			var parent = interactor.GetParent();
+			if (parent == null) return;
+
+			Farmer farmer = parent.GetNodeOrNull<Farmer>("Farmer");
+			if (farmer == null) return;
+
+			farmer.PlayPlowAnimation();
 		}
 
 		// UI更新部分

@@ -35,3 +35,4 @@ interact={
 2d_physics/layer_4="外部墙体"
 2d_physics/layer_5="内部墙体"
 2d_physics/layer_6="掉落物"
+2d_physics/layer_7="地板"

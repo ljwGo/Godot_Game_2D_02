@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://du5eumro16dyo"]
+[gd_scene load_steps=48 format=3 uid="uid://du5eumro16dyo"]
 
 [ext_resource type="Script" uid="uid://d3dsh0bxfvvpe" path="res://scripts/PlayerController.cs" id="1_hjaqi"]
 [ext_resource type="Texture2D" uid="uid://m5i0b03chhn0" path="res://assets/Sprout Sorry pack/Tests/teemo 8 directions.png" id="1_xo3ru"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://b1lshb0ysr5lh" path="res://scripts/Inventory.cs" id="7_hp4bs"]
 [ext_resource type="Script" uid="uid://kswou03obsn3" path="res://scripts/Farmer.cs" id="8_g2vtq"]
 [ext_resource type="Script" uid="uid://q2xhhej6e6b" path="res://scripts/InteractPoint.cs" id="9_2fvbb"]
+[ext_resource type="Script" uid="uid://ex0dumkcn0n3" path="res://scripts/debug/InteractDraw.cs" id="10_ml7e8"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xo3ru"]
 radius = 6.0
@@ -61,6 +62,38 @@ region = Rect2(96, 16, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_s4jxa"]
 atlas = ExtResource("1_xo3ru")
 region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qucqc"]
+atlas = ExtResource("2_ct4mp")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xsw3c"]
+atlas = ExtResource("2_ct4mp")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l1uwf"]
+atlas = ExtResource("2_ct4mp")
+region = Rect2(0, 96, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8ie14"]
+atlas = ExtResource("2_ct4mp")
+region = Rect2(48, 96, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pk8el"]
+atlas = ExtResource("2_ct4mp")
+region = Rect2(0, 144, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3vgh4"]
+atlas = ExtResource("2_ct4mp")
+region = Rect2(48, 144, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h3knh"]
+atlas = ExtResource("2_ct4mp")
+region = Rect2(0, 48, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n3008"]
+atlas = ExtResource("2_ct4mp")
+region = Rect2(48, 48, 48, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oh5ij"]
 atlas = ExtResource("1_xo3ru")
@@ -189,6 +222,50 @@ animations = [{
 "speed": 5.0
 }, {
 "frames": [{
+"duration": 2.5,
+"texture": SubResource("AtlasTexture_qucqc")
+}, {
+"duration": 3.0,
+"texture": SubResource("AtlasTexture_xsw3c")
+}],
+"loop": false,
+"name": &"plowDown",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 2.5,
+"texture": SubResource("AtlasTexture_l1uwf")
+}, {
+"duration": 3.0,
+"texture": SubResource("AtlasTexture_8ie14")
+}],
+"loop": false,
+"name": &"plowLeft",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 2.5,
+"texture": SubResource("AtlasTexture_pk8el")
+}, {
+"duration": 3.0,
+"texture": SubResource("AtlasTexture_3vgh4")
+}],
+"loop": false,
+"name": &"plowRight",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 2.5,
+"texture": SubResource("AtlasTexture_h3knh")
+}, {
+"duration": 3.0,
+"texture": SubResource("AtlasTexture_n3008")
+}],
+"loop": false,
+"name": &"plowUp",
+"speed": 5.0
+}, {
+"frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_oh5ij")
 }, {
@@ -302,8 +379,11 @@ script = ExtResource("9_2fvbb")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractPoint"]
 position = Vector2(0, 11)
 shape = SubResource("CircleShape2D_2fvbb")
+debug_color = Color(0.86215353, 0.3329549, 0.3699922, 0.41960785)
+script = ExtResource("10_ml7e8")
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="Faller" method="OnAnimationFinished"]
+[connection signal="animation_finished" from="AnimatedSprite2D" to="Farmer" method="OnPlowAnimationFinished"]
 [connection signal="Interact" from="Interactor" to="." method="OnInteractStart"]
 [connection signal="InventoryFull" from="Inventory" to="." method="OnInventoryFull"]
 [connection signal="ItemChange" from="Inventory" to="." method="OnInventoryItemChange"]
