@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://cnm5m1d8q7ood"]
+[gd_scene load_steps=6 format=3 uid="uid://cnm5m1d8q7ood"]
 
 [ext_resource type="Texture2D" uid="uid://c1r1dfp5t285f" path="res://tres/UI/inventory.tres" id="1_gfg8l"]
+[ext_resource type="Script" uid="uid://b6lf5vtb5wpt8" path="res://scripts/UI/Slot.cs" id="2_61xaa"]
 [ext_resource type="PackedScene" uid="uid://dfhw64rvv6p7k" path="res://scene/UI/tile.tscn" id="2_i3rv0"]
 
 [sub_resource type="Theme" id="Theme_swljk"]
@@ -22,8 +23,11 @@ offset_bottom = 16.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 4
+mouse_filter = 0
 theme = SubResource("Theme_swljk")
 texture = SubResource("AtlasTexture_gfg8l")
+script = ExtResource("2_61xaa")
 
 [node name="Tile" parent="." instance=ExtResource("2_i3rv0")]
 layout_mode = 1
+mouse_filter = 1

@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using UI;
 
 namespace Game
 {
@@ -8,10 +9,12 @@ namespace Game
 		[Export] public PackedScene slotScene;
 		[Export] public uint size;
 		HBoxContainer slotsContainer;
+		PlayerController playerController;
 
 		public override void _Ready()
 		{
 			slotsContainer = GetNode<HBoxContainer>("Slots");
+			playerController = GetNode<PlayerController>("%Player");
 			GenerateSlots();
 		}
 
@@ -33,10 +36,29 @@ namespace Game
 
 		void GenerateSlots()
 		{
-			for (uint i = 0; i < size; i++)
+			for (int i = 0; i < size; i++)
 			{
 				var slot = slotScene.Instantiate();
+				Slot slotScript = slot as Slot;
+				slotScript.ix = i;
+				slotScript.SlotClicked += HandleSlotClicked;
 				slotsContainer.AddChild(slot);
+			}
+		}
+
+		void HandleSlotClicked(int index)
+		{
+			GD.Print($"Slot {index} clicked in MainInventory");
+			Inventory inventory = playerController.GetNode<Inventory>("Inventory");
+			inventory.ActiveItemIx = index;
+
+			var children = slotsContainer.GetChildren();
+			for (int i = 0; i < children.Count; i++)
+			{
+				if (children[i] is Slot slot)
+				{
+					slot.SetBeSelected(i == index);
+				}
 			}
 		}
 	}

@@ -22,15 +22,10 @@ namespace Game
 			AreaEntered += OnAreaEntered;
 		}
 
-		public override void _Process(double delta)
+		public override void _UnhandledInput(InputEvent @event)
 		{
-		}
-
-		public override void _PhysicsProcess(double delta)
-		{
-			// 这里可以添加一些逻辑，比如优先交互最近的对象，或者根据玩家朝向选择交互对象
-			// 例如：如果按下交互键，触发最近的交互对象的交互事件
-			if (Input.IsActionJustPressed("interact"))
+			// 只有当鼠标点击没被 UI 拦截时，这里才会运行
+			if (@event.IsActionPressed("interact"))
 			{
 				EmitSignal(SignalName.Interact, new InteractEventHandlerParams { interactivesInRange = interactivesInRange }, this);
 			}

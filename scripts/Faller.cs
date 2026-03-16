@@ -93,8 +93,12 @@ namespace Game
 		// 无法连接异步的事件处理者
 		public void OnAnimationFinished()
 		{
-			Change2IdleAnim();
-			MayDoChop(currentTarget);
+			string currentAnimation = animatedSprite2D.Animation;
+			if (currentAnimation.StartsWith("chop"))
+			{
+				Change2IdleAnim();
+				MayDoChop(currentTarget);
+			}
 		}
 
 		private void Change2IdleAnim()

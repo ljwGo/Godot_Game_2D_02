@@ -10,8 +10,53 @@ namespace Game
 
 		[Signal] public delegate void ItemChangeEventHandler(int index, InventoryItem item);
 		[Signal] public delegate void InventoryFullEventHandler(InventoryItem item);
+		[Signal] public delegate void ActiveItemChangeEventHandler(int index, InventoryItem newActiveItem);
 
-		private InventoryItem[] items = [];
+		InventoryItem[] items = [];
+		InventoryItem _activeItem = null;
+		int _activeItemIx = -1;
+
+		public int ActiveItemIx
+		{
+			get => _activeItemIx;
+			set
+			{
+				if (value < -1 || value >= capacity)
+				{
+					GD.PrintErr($"ActiveItemIx {value} is out of bounds. Valid range is -1 to {capacity - 1}.");
+					return;
+				}
+				_activeItemIx = value;
+				_activeItem = (_activeItemIx != -1) ? items[_activeItemIx] : null;
+				EmitSignal(SignalName.ActiveItemChange, _activeItemIx, _activeItem);
+			}
+		}
+
+		public InventoryItem ActiveItem {
+			get => _activeItem;
+			set
+			{
+				if (value == null)
+				{
+					_activeItemIx = -1; // 取消选中
+					_activeItem = null;
+					EmitSignal(SignalName.ActiveItemChange, _activeItemIx, _activeItem);
+					return;
+				}
+
+				int ix = Array.IndexOf(items, value);
+				if (ix >= 0)
+				{
+					_activeItemIx = ix; // 设置为对应索引
+					_activeItem = items[_activeItemIx];
+					EmitSignal(SignalName.ActiveItemChange, _activeItemIx, _activeItem);
+				}
+				else
+				{
+					GD.PrintErr("Attempted to set activeItem to an item that is not in the inventory.");
+				}
+			}
+		}
 
 		public override void _Ready()
 		{
@@ -48,10 +93,10 @@ namespace Game
 			addQuantity = 0;
 			if (item == null) return false;
 
-			Stackable stackable = GetStackableComponent(item);
+			Stackable otherStack = GetStackableComponent(item);
 
 			// 如果不可堆叠，只要有空位就能放1个
-			if (stackable == null)
+			if (otherStack == null)
 			{
 				if (FindEmptyIx() != -1)
 				{
@@ -66,14 +111,16 @@ namespace Game
 			{
 				if (items[i] == null)
 				{
-					addQuantity = stackable.currentStackSize;
+					addQuantity = otherStack.currentStackSize;
+					return addQuantity > 0;
 				}
 				else if (items[i].itemName == item.itemName)
 				{
-					Stackable otherStack = GetStackableComponent(items[i]);
-					if (otherStack != null && stackable.CanStackWith(otherStack))
+					Stackable stackable = GetStackableComponent(items[i]);
+					if (stackable != null && stackable.CanStackWith(otherStack))
 					{
-						addQuantity = Math.Min(otherStack.GetRemainderSpace(), stackable.currentStackSize);
+						addQuantity = Math.Min(stackable.GetRemainderSpace(), otherStack.currentStackSize);
+						return addQuantity > 0;
 					}
 				}
 			}
