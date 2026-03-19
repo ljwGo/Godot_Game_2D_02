@@ -27,7 +27,7 @@ namespace Game
 			// 将 delta 转换为 float 以匹配 Vector2 运算
 			float fDelta = (float)delta;
 
-			HandleMovement(fDelta);
+			if (CanMove()) HandleMovement(fDelta);
 			ApplyAnimation();
 			MakeInteractPointDirection();
 
@@ -52,7 +52,8 @@ namespace Game
 			// 		MayDoChop(@params, interactor);
 			// 	}
 			// }
-			MayDoPlow(@params, interactor);
+			// MayDoPlow(@params, interactor);
+			MayOpenChest(@params, interactor);
 		}
 
 		private void MakeInteractPointDirection()
@@ -78,13 +79,6 @@ namespace Game
 
 		private void HandleMovement(float delta)
 		{
-			string currentAnimation = _animatedSprite.Animation;
-			if (currentAnimation.StartsWith("chop"))
-			{
-				Velocity = Vector2.Zero; // 砍伐动画期间禁止移动
-				return;
-			}
-
 			// 1. 获取输入向量 (左, 右, 上, 下)
 			// GetVector 会自动归一化，且支持手柄压感
 			Vector2 inputDir = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
@@ -100,6 +94,17 @@ namespace Game
 				// 3. 无输入：朝零速度减速（模拟摩擦力）
 				Velocity = Velocity.MoveToward(Vector2.Zero, Friction * delta);
 			}
+		}
+
+		private bool CanMove()
+		{
+			string currentAnimation = _animatedSprite.Animation;
+			if (currentAnimation.StartsWith("chop") || currentAnimation.StartsWith("plow"))
+			{
+				Velocity = Vector2.Zero; // 砍伐动画期间禁止移动
+				return false;
+			}
+			return true;
 		}
 
 		private void ApplyAnimation()
@@ -156,6 +161,21 @@ namespace Game
 			if (farmer == null) return;
 
 			farmer.PlayPlowAnimation();
+		}
+
+		private void MayOpenChest(InteractEventHandlerParams @params, Interactor interactor)
+		{
+			var parent = interactor.GetParent();
+			if (parent == null) return;
+
+			foreach (var interactive in @params.interactivesInRange)
+			{
+				var interactiveParent = interactive.GetParent();
+				if (interactiveParent is Chest chest)
+				{
+					chest.PlayOpenAnimation();
+				}
+			}
 		}
 
 		// UI更新部分

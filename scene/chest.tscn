@@ -1,0 +1,157 @@
+[gd_scene load_steps=23 format=3 uid="uid://csgxih81mrsi1"]
+
+[ext_resource type="Texture2D" uid="uid://c5khvtxgmea4t" path="res://assets/Sprout Lands - Sprites - Basic pack/Objects/Chest.png" id="1_26f88"]
+[ext_resource type="Script" uid="uid://dd2ingx3blumg" path="res://scripts/Chest.cs" id="1_26vdv"]
+[ext_resource type="Script" uid="uid://ehkdg5vdn8d6" path="res://scripts/Interactive.cs" id="2_c0k1r"]
+[ext_resource type="Script" uid="uid://cxo1l7lsfrc88" path="res://scripts/LootDroppable.cs" id="4_26vdv"]
+[ext_resource type="PackedScene" uid="uid://djokncm6nma0o" path="res://scene/wood.tscn" id="5_num40"]
+[ext_resource type="Script" uid="uid://b5o0k3lowpuwg" path="res://resource/LootItemParam.cs" id="6_pqyof"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ax07c"]
+size = Vector2(14, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nn232"]
+atlas = ExtResource("1_26f88")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c82hy"]
+atlas = ExtResource("1_26f88")
+region = Rect2(0, 48, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jhc4n"]
+atlas = ExtResource("1_26f88")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8ipbj"]
+atlas = ExtResource("1_26f88")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fn8lc"]
+atlas = ExtResource("1_26f88")
+region = Rect2(96, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_65jmh"]
+atlas = ExtResource("1_26f88")
+region = Rect2(144, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d4m4s"]
+atlas = ExtResource("1_26f88")
+region = Rect2(192, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wghl8"]
+atlas = ExtResource("1_26f88")
+region = Rect2(0, 48, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6ckq1"]
+atlas = ExtResource("1_26f88")
+region = Rect2(48, 48, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s2s38"]
+atlas = ExtResource("1_26f88")
+region = Rect2(96, 48, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q6d23"]
+atlas = ExtResource("1_26f88")
+region = Rect2(144, 48, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nkpe3"]
+atlas = ExtResource("1_26f88")
+region = Rect2(192, 48, 48, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ax07c"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nn232")
+}],
+"loop": false,
+"name": &"idleDown",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c82hy")
+}],
+"loop": false,
+"name": &"idleLeft",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jhc4n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8ipbj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fn8lc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_65jmh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d4m4s")
+}],
+"loop": false,
+"name": &"openDown",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wghl8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6ckq1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s2s38")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q6d23")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nkpe3")
+}],
+"loop": false,
+"name": &"openLeft",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_c0k1r"]
+radius = 30.265491
+
+[sub_resource type="Resource" id="Resource_45vfh"]
+script = ExtResource("6_pqyof")
+lootScene = ExtResource("5_num40")
+quantity = 3
+metadata/_custom_type_script = "uid://b5o0k3lowpuwg"
+
+[node name="Chest" type="StaticBody2D"]
+disable_mode = 1
+collision_layer = 4
+script = ExtResource("1_26vdv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -1)
+shape = SubResource("RectangleShape2D_ax07c")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_ax07c")
+animation = &"idleDown"
+
+[node name="Interactive" type="Area2D" parent="."]
+collision_layer = 4
+script = ExtResource("2_c0k1r")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactive"]
+shape = SubResource("CircleShape2D_c0k1r")
+
+[node name="LootDroppable" type="Node" parent="."]
+script = ExtResource("4_26vdv")
+lootItems = Array[Object]([SubResource("Resource_45vfh")])
+minDropRadius = 15.0
+maxDropRadius = 25.0
+jumpHeight = 20.0
+duration = 1.0
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="OnAnimationFinished"]

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 
 namespace Game
@@ -10,8 +11,15 @@ namespace Game
 		[Export] public float jumpHeight = 10.0f;
 		[Export] public float duration = 3f;
 
+		[Signal] public delegate void BeforeLootDropEventHandler();
+
 		// 统一存放掉落物的节点
 		private Node2D lootContainer;
+
+		public partial class LootItemsParam: RefCounted
+		{
+			public List<Loot> lootItems;
+		}
 
 		public override void _Ready()
 		{
@@ -36,21 +44,27 @@ namespace Game
 					continue;
 				}
 
+				List<Loot> itemsToDrop = [];
+
 				for (int i = 0; i < item.quantity; i++)
 				{
 					if (GD.Randf() <= item.dropChance)
 					{
-						Vector2 dropPosition = GetRandomDropPosition(parent.GlobalPosition, minDropRadius, maxDropRadius);
 						Loot lootInstance = item.lootScene.Instantiate<Loot>();
-						LootDrop lootDrop = lootInstance.GetNode<LootDrop>("LootDrop");
 						Stackable stackable = lootInstance.GetNodeOrNull<Stackable>("Stackable");
-						if (stackable != null)
-						{
-							stackable.SetStackSize(item.stackSize);
-						}
-						lootContainer.AddChild(lootInstance);
-						lootDrop.StartDrop(parent.GlobalPosition, dropPosition, jumpHeight, duration);
+						stackable?.SetStackSize(item.stackSize);
+						itemsToDrop.Add(lootInstance);
 					}
+				}
+
+				EmitSignal(SignalName.BeforeLootDrop, new LootItemsParam { lootItems = itemsToDrop });
+
+				foreach (var lootInstance in itemsToDrop)
+				{
+					lootContainer.AddChild(lootInstance);
+					LootDrop lootDrop = lootInstance.GetNode<LootDrop>("LootDrop");
+					Vector2 dropPosition = GetRandomDropPosition(parent.GlobalPosition, minDropRadius, maxDropRadius);
+					lootDrop.StartDrop(parent.GlobalPosition, dropPosition, jumpHeight, duration);
 				}
 			}
 		}

@@ -31,7 +31,7 @@ interact={
 [layer_names]
 
 2d_physics/layer_1="玩家"
-2d_physics/layer_3="植物"
+2d_physics/layer_3="可交互的"
 2d_physics/layer_4="外部墙体"
 2d_physics/layer_5="内部墙体"
 2d_physics/layer_6="掉落物"

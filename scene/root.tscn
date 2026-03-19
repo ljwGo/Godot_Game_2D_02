@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=4 uid="uid://bx275i012lm3i"]
+[gd_scene load_steps=16 format=4 uid="uid://bx275i012lm3i"]
 
 [ext_resource type="TileSet" uid="uid://cfiqxdctej66w" path="res://tres/floor.tres" id="1_b8pkg"]
 [ext_resource type="PackedScene" uid="uid://du5eumro16dyo" path="res://scene/player.tscn" id="2_soann"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://dn12qx157vwif" path="res://scene/house.tscn" id="5_osfxk"]
 [ext_resource type="Script" uid="uid://ctkp08e8v2v4k" path="res://scripts/managers/UIManager.cs" id="7_ax07c"]
 [ext_resource type="PackedScene" uid="uid://60pjcncgiapp" path="res://scene/apple_tree.tscn" id="7_qaagc"]
+[ext_resource type="PackedScene" uid="uid://csgxih81mrsi1" path="res://scene/chest.tscn" id="8_evhkr"]
 [ext_resource type="PackedScene" uid="uid://cnm5m1d8q7ood" path="res://scene/UI/slot.tscn" id="8_swljk"]
 [ext_resource type="Texture2D" uid="uid://48p67xc1tlj8" path="res://assets/Sprout Lands - UI Pack - Basic pack/emojis-free/emoji style ui/Inventory_Blocks_Spritesheet.png" id="8_y7soe"]
 [ext_resource type="Script" uid="uid://c6ypa7cv4p1tt" path="res://scripts/MainInventory.cs" id="9_ax07c"]
@@ -437,6 +438,9 @@ zoom = Vector2(3, 3)
 position_smoothing_enabled = true
 
 [node name="LootsContainer" type="Node2D" parent="Game"]
+
+[node name="Chest" parent="Game" instance=ExtResource("8_evhkr")]
+position = Vector2(-65, 28)
 
 [node name="ManagerContainer" type="Node" parent="."]
 
