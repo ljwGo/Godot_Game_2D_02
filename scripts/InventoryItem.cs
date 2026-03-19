@@ -11,7 +11,8 @@ namespace Game
 		{
 			if (string.IsNullOrEmpty(itemName))
 			{
-				GD.PrintErr($"InventoryItem {Name} has an empty itemName!");
+				Node2D parent = GetParent<Node2D>();
+				itemName = parent.Name; // 默认使用父节点的名称作为物品名称
 			}
 		}
 	}
