@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=4 uid="uid://bx275i012lm3i"]
+[gd_scene load_steps=21 format=4 uid="uid://bx275i012lm3i"]
 
 [ext_resource type="TileSet" uid="uid://cfiqxdctej66w" path="res://tres/floor.tres" id="1_b8pkg"]
 [ext_resource type="PackedScene" uid="uid://du5eumro16dyo" path="res://scene/player.tscn" id="2_soann"]
@@ -12,6 +12,10 @@
 [ext_resource type="PackedScene" uid="uid://cnm5m1d8q7ood" path="res://scene/UI/slot.tscn" id="8_swljk"]
 [ext_resource type="Texture2D" uid="uid://48p67xc1tlj8" path="res://assets/Sprout Lands - UI Pack - Basic pack/emojis-free/emoji style ui/Inventory_Blocks_Spritesheet.png" id="8_y7soe"]
 [ext_resource type="Script" uid="uid://c6ypa7cv4p1tt" path="res://scripts/MainInventory.cs" id="9_ax07c"]
+[ext_resource type="PackedScene" uid="uid://5ystchq5x05b" path="res://scene/tool.tscn" id="9_nn232"]
+[ext_resource type="Script" uid="uid://cdytuarpbfvhr" path="res://scripts/managers/DialogManager.cs" id="11_8ipbj"]
+[ext_resource type="Texture2D" uid="uid://cdy7lua7jh6k2" path="res://assets/Sprout Lands - UI Pack - Basic pack/Sprite sheets/Setting menu.png" id="14_c82hy"]
+[ext_resource type="Script" uid="uid://b00oo5m4rbgov" path="res://scripts/UI/GradientText.cs" id="15_jhc4n"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_evhkr"]
 texture = ExtResource("5_ax07c")
@@ -402,6 +406,18 @@ texture_margin_right = 8.0
 texture_margin_bottom = 8.0
 region_rect = Rect2(3, 98, 42, 44)
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jhc4n"]
+texture = ExtResource("14_c82hy")
+texture_margin_left = 5.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 5.0
+expand_margin_left = 8.0
+expand_margin_top = 8.0
+expand_margin_right = 8.0
+expand_margin_bottom = 8.0
+region_rect = Rect2(138, 11, 108, 124)
+
 [node name="Root" type="Node2D"]
 
 [node name="Game" type="Node2D" parent="."]
@@ -442,10 +458,16 @@ position_smoothing_enabled = true
 [node name="Chest" parent="Game" instance=ExtResource("8_evhkr")]
 position = Vector2(-65, 28)
 
+[node name="AX" parent="Game" instance=ExtResource("9_nn232")]
+position = Vector2(-65, 20)
+
 [node name="ManagerContainer" type="Node" parent="."]
 
 [node name="UIManager" type="Node" parent="ManagerContainer"]
 script = ExtResource("7_ax07c")
+
+[node name="DialogManager" type="Node" parent="ManagerContainer"]
+script = ExtResource("11_8ipbj")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -482,3 +504,27 @@ size = 12
 
 [node name="Slots" type="HBoxContainer" parent="CanvasLayer/Control/UI/MainInventory"]
 layout_mode = 2
+
+[node name="DialogContainer" type="Control" parent="CanvasLayer/Control/UI"]
+layout_mode = 2
+
+[node name="TextDialog" type="PanelContainer" parent="CanvasLayer/Control/UI/DialogContainer"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -155.0
+offset_top = -110.0
+offset_right = 155.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_jhc4n")
+
+[node name="Label" type="RichTextLabel" parent="CanvasLayer/Control/UI/DialogContainer/TextDialog"]
+custom_minimum_size = Vector2(400, 100)
+layout_mode = 2
+script = ExtResource("15_jhc4n")
