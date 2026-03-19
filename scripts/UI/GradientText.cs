@@ -2,7 +2,7 @@ using Godot;
 
 namespace UI
 {
-	public partial class GradientText : Label
+	public partial class GradientText : RichTextLabel
 	{
 		[Export] public float GradientSpeed = 0.05f;
 
