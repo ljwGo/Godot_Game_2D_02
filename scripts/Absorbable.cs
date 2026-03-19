@@ -6,23 +6,20 @@ namespace Game
 	public partial class Absorbable : Area2D
 	{
 		[Export] public float absorbSpeed = 40.0f;
-		[Signal] public delegate void AbsorbFinishedEventHandler(Absorber absorber, Absorbable absorbable);
-		[Signal] public delegate void MayStartAbsorbEventHandler(Absorber absorber, Absorbable absorbable);
 
-		public bool isAbsorbing = false;
-
-		Timer canAbsorbCheckTimer;
 		Node2D parentNode;
 		Absorber target;
 		bool canAbsorb = false;
 
+		[Signal] public delegate void AbsorbFinishedEventHandler(Absorber absorber, Absorbable absorbable);
+		[Signal] public delegate void CloseToTargetEventHandler(Absorber absorber, Absorbable absorbable);
+
 		public override void _Ready()
 		{
-			AreaEntered += OnAreaEntered;
-			AreaExited += OnAreaExited;
+			parentNode = GetParent<Node2D>();
 		}
 
-		public override void _Process(double delta)
+		public override void _PhysicsProcess(double delta)
 		{
 			if (canAbsorb && target != null)
 			{
@@ -33,13 +30,17 @@ namespace Game
 		public void SetTarget(Absorber absorber)
 		{
 			target = absorber;
-			parentNode = GetParent<Node2D>();
 		}
 
 		public void StartAbsorb()
 		{
 			canAbsorb = true;
-			isAbsorbing = true;
+		}
+
+		public void StopAbsorb()
+		{
+			canAbsorb = false;
+			EmitSignal(SignalName.AbsorbFinished, target, this);
 		}
 
 		public void Absorb2Target(Absorber absorber)
@@ -56,66 +57,8 @@ namespace Game
 			else
 			{
 				parentNode.GlobalPosition = targetPos;
-				isAbsorbing = false;
-				canAbsorb = false;
-				EmitSignal(SignalName.AbsorbFinished, target, this);
+				EmitSignal(SignalName.CloseToTarget, target, this);
 			}
-		}
-
-		public void OnAreaEntered(Area2D area)
-		{
-			if (area is Absorber absorber)
-			{
-				EmitSignal(SignalName.MayStartAbsorb, absorber, this);
-				StartCanAbsorbCheck(absorber);
-			}
-		}
-
-		public void OnAreaExited(Area2D area)
-		{
-			if (area is Absorber)
-			{
-				SetTarget(null);
-				if (canAbsorbCheckTimer != null && IsInstanceValid(canAbsorbCheckTimer))
-				{
-					canAbsorbCheckTimer.Stop();
-					canAbsorbCheckTimer.QueueFree();
-				}
-			}
-		}
-
-		public void StartCanAbsorbCheck(Absorber absorber)
-		{
-			if (canAbsorbCheckTimer != null && IsInstanceValid(canAbsorbCheckTimer))
-			{
-				canAbsorbCheckTimer.Stop();
-				canAbsorbCheckTimer.QueueFree();
-			}
-
-			SetTarget(absorber);
-			canAbsorbCheckTimer = new Timer
-			{
-				WaitTime = 0.5f,
-				OneShot = true
-			};
-			canAbsorbCheckTimer.Timeout += () =>
-			{
-				if (IsInstanceValid(absorber) && IsInstanceValid(this))
-				{
-					EmitSignal(SignalName.MayStartAbsorb, absorber, this);
-					// 通过isAbsorbing来回传是否已经开始吸收
-					if (isAbsorbing)
-					{
-						if (IsInstanceValid(canAbsorbCheckTimer))
-						{
-							canAbsorbCheckTimer.Stop();
-							canAbsorbCheckTimer.QueueFree();
-						}
-					}
-				}
-			};
-			AddChild(canAbsorbCheckTimer);
-			canAbsorbCheckTimer.Start();
 		}
 	}
 }

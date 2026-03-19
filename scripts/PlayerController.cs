@@ -1,5 +1,5 @@
 using System;
-using System.Data.Common;
+using System.Collections.Generic;
 using Godot;
 
 namespace Game
@@ -42,18 +42,61 @@ namespace Game
 
 		public void OnInteractStart(InteractEventHandlerParams @params, Interactor interactor)
 		{
-			// foreach (var interactive in @params.interactivesInRange)
-			// {
-			// 	var interactiveParent = interactive.GetParent();
-			// 	var interactorParent = interactor.GetParent();
-			// 	if (interactiveParent != null && interactorParent != null)
-			// 	{
-			// 		// 伐木
-			// 		MayDoChop(@params, interactor);
-			// 	}
-			// }
+			foreach (var interactive in @params.interactivesInRange)
+			{
+				var interactiveParent = interactive.GetParent();
+				var interactorParent = interactor.GetParent();
+				if (interactiveParent != null && interactorParent != null)
+				{
+					// 伐木
+					MayDoChop(@params, interactor);
+				}
+			}
 			// MayDoPlow(@params, interactor);
-			MayOpenChest(@params, interactor);
+			// MayOpenChest(@params, interactor);
+		}
+
+		// 是否可吸收
+		public void OnMayStartAbsorb(Absorber absorber, Absorber.MayStartAbsorbEventArgs args)
+		{
+			List<Absorbable> absorbablesInRange = args.AbsorbablesInRange;
+			for (int i = absorbablesInRange.Count - 1; i >= 0; i--)
+			{
+				Absorbable absorbable = absorbablesInRange[i];
+				Inventory inventory = absorber.GetParent().GetNodeOrNull<Inventory>("Inventory");
+				InventoryItem item = absorbable.GetParent().GetNodeOrNull<InventoryItem>("InventoryItem");
+				if (inventory != null && item != null && inventory.CanAddItem(item, out uint canAddCount))
+				{
+					absorbable.SetTarget(absorber);
+					absorbable.StartAbsorb();
+					// 移除物品
+					absorbablesInRange.RemoveAt(i);
+				}
+			}
+		}
+
+		// 决定吸收
+		public void OnAbsorbFinished(Absorber absorber, Absorbable absorbable)
+		{
+			Inventory inventory = absorber.GetParent().GetNodeOrNull<Inventory>("Inventory");
+			InventoryItem item = absorbable.GetParent().GetNodeOrNull<InventoryItem>("InventoryItem");
+			if (inventory != null && item != null)
+			{
+				if (inventory.CanAddItem(item, out uint canAddCount))
+				{
+					inventory.AddItemRecursive(item);
+				}
+				else
+				{
+					// Todo: 重新开启是否可吸收判定
+					// await ToSignal(GetTree().CreateTimer(2f), "timeout");
+					// absorbable.StartCanAbsorbCheck(absorber);
+				}
+			}
+			else
+			{
+				GD.PrintErr("Failed to get inventory or item reference when absorb finished!");
+			}
 		}
 
 		private void MakeInteractPointDirection()

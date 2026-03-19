@@ -40,5 +40,4 @@ absorbSpeed = 3.0
 shape = SubResource("CircleShape2D_vqwuo")
 
 [connection signal="DropFinished" from="LootDrop" to="." method="OnLootDropFinished"]
-[connection signal="AbsorbFinished" from="Absorbable" to="." method="OnAbsorbFinished"]
-[connection signal="MayStartAbsorb" from="Absorbable" to="." method="OnMayStartAbsorb"]
+[connection signal="CloseToTarget" from="Absorbable" to="." method="OnLootAbsorbCloseToTarget"]

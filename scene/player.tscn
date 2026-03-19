@@ -385,5 +385,7 @@ script = ExtResource("10_ml7e8")
 [connection signal="animation_finished" from="AnimatedSprite2D" to="Faller" method="OnAnimationFinished"]
 [connection signal="animation_finished" from="AnimatedSprite2D" to="Farmer" method="OnPlowAnimationFinished"]
 [connection signal="Interact" from="Interactor" to="." method="OnInteractStart"]
+[connection signal="DoAbsorb" from="Absorber" to="." method="OnAbsorbFinished"]
+[connection signal="MayStartAbsorb" from="Absorber" to="." method="OnMayStartAbsorb"]
 [connection signal="InventoryFull" from="Inventory" to="." method="OnInventoryFull"]
 [connection signal="ItemChange" from="Inventory" to="." method="OnInventoryItemChange"]
