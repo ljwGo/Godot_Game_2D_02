@@ -9,6 +9,11 @@ namespace Data
 		Choice,
 	}
 
+	public enum AvatarShowPosition {
+		Left,
+		Right,
+	}
+
 	public class DialogEdge: AbstractEdge<DialogNode>
 	{
 		public string choiceText;
@@ -19,6 +24,13 @@ namespace Data
 	{
 		public string text;
 		public DialogNodeType type;
+
+		public AvatarShowPosition avatarShowPos;
+		public string name;
+		public Resource avatarResource;
+		public Vector2 avatarPos;
+		public Vector2 avatarSize;
+		public bool isAvatarFlip;
 	}
 
 	public class DialogGraphics

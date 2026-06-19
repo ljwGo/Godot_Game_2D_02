@@ -1,3 +1,4 @@
+using Data;
 using Godot;
 using System;
 using UI;
@@ -10,6 +11,8 @@ public partial class DialogContainer : Control
   Button textAreaBtn;
   PanelContainer choiceContainer;
   VBoxContainer vChoicesBox;
+  PanelContainer leftAvatarContainer;
+  PanelContainer rightAvatarContainer;
 
   Tween tween;
 
@@ -24,7 +27,7 @@ public partial class DialogContainer : Control
     VBoxContainer vBoxContainer = GetNode<VBoxContainer>("TextContainer/VBoxContainer");
     contentLabel = vBoxContainer.GetNode<RichTextLabel>("ContentArea");
     indicateLabel = vBoxContainer.GetNode<RichTextLabel>("NextIndicate");
-    
+
     indicateBtn = indicateLabel.GetNode<Button>("Button");
     textAreaBtn = contentLabel.GetNode<Button>("Button");
 
@@ -33,13 +36,18 @@ public partial class DialogContainer : Control
 
     indicateBtn.Connect("button_down", new Callable(this, "OnNextIndicateClicked"));
     textAreaBtn.Connect("button_down", new Callable(this, "OnTextAreaClicked"));
+
+    leftAvatarContainer = GetNode<PanelContainer>("LeftAvatar");
+    rightAvatarContainer = GetNode<PanelContainer>("RightAvatar");
   }
 
-  public void Open() {
+  public void Open()
+  {
     Visible = true;
   }
 
-  public void Close() {
+  public void Close()
+  {
     Visible = false;
   }
 
@@ -54,7 +62,7 @@ public partial class DialogContainer : Control
 
     contentLabel.Text = text;
     contentLabel.VisibleCharacters = 0;
-  
+
     // Debug: duration的时间不准确, 要移除 [] 标签内的字符数
     float duration = text.Length * speed;
 
@@ -92,21 +100,90 @@ public partial class DialogContainer : Control
     EmitSignal(SignalName.TextAllDisplayed);
   }
 
+  public void ShowAvatar(
+    AvatarShowPosition showPos,
+    Resource resource,
+    Vector2 avatarPos,
+    Vector2 avatarSize,
+    string name,
+    bool isFlipH = false
+  )
+  {
+    ShowAvatar(showPos);
+
+    PanelContainer targetContainer = null;
+    switch (showPos)
+    {
+      case AvatarShowPosition.Left:
+        targetContainer = leftAvatarContainer;
+        break;
+      case AvatarShowPosition.Right:
+        targetContainer = rightAvatarContainer;
+        break;
+    }
+
+    if (targetContainer == null) return;
+
+    TextureRect targetRect = targetContainer.GetNode<TextureRect>("VBoxContainer/Avatar/TextureRect");
+    Label nameLabel = targetContainer.GetNode<Label>("VBoxContainer/Name");
+
+    nameLabel.Text = name;
+    AtlasTexture atlasTexture = targetRect.Texture as AtlasTexture;
+    atlasTexture.Atlas = resource as Texture2D;
+    atlasTexture.Region = new Rect2(avatarPos, avatarSize);
+
+    targetRect.FlipH = isFlipH;
+  }
 
   public void OnNextIndicateClicked()
   {
     EmitSignal(SignalName.NextIndicateClicked);
   }
 
-  public void OnTextAreaClicked() {
+  public void OnTextAreaClicked()
+  {
     EmitSignal(SignalName.TextAreaClick);
   }
 
-  public void ShowChoices() {
+  public void ShowAvatar(AvatarShowPosition showPos)
+  {
+    switch (showPos)
+    {
+      case AvatarShowPosition.Left:
+        leftAvatarContainer.Visible = true;
+        break;
+      case AvatarShowPosition.Right:
+        rightAvatarContainer.Visible = true;
+        break;
+    }
+  }
+
+  public void HideAvatar(AvatarShowPosition showPos)
+  {
+    switch (showPos)
+    {
+      case AvatarShowPosition.Left:
+        leftAvatarContainer.Visible = false;
+        break;
+      case AvatarShowPosition.Right:
+        rightAvatarContainer.Visible = false;
+        break;
+    }
+  }
+
+  public void HideAllAvatar()
+  {
+    leftAvatarContainer.Visible = false;
+    rightAvatarContainer.Visible = false;
+  }
+
+  public void ShowChoices()
+  {
     choiceContainer.Visible = true;
   }
 
-  public void HideChoices() {
+  public void HideChoices()
+  {
     choiceContainer.Visible = false;
   }
 
@@ -115,11 +192,13 @@ public partial class DialogContainer : Control
     indicateLabel.Visible = true;
   }
 
-  public void HideNextIndicate() {
+  public void HideNextIndicate()
+  {
     indicateLabel.Visible = false;
   }
 
-  public void ClearChoices() {
+  public void ClearChoices()
+  {
     foreach (Button button in vChoicesBox.GetChildren())
     {
       button.QueueFree();

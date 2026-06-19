@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=4 uid="uid://bx275i012lm3i"]
+[gd_scene load_steps=39 format=4 uid="uid://bx275i012lm3i"]
 
 [ext_resource type="TileSet" uid="uid://cfiqxdctej66w" path="res://tres/floor.tres" id="1_b8pkg"]
 [ext_resource type="PackedScene" uid="uid://du5eumro16dyo" path="res://scene/player.tscn" id="2_soann"]
@@ -15,7 +15,9 @@
 [ext_resource type="PackedScene" uid="uid://5ystchq5x05b" path="res://scene/tool.tscn" id="9_nn232"]
 [ext_resource type="Script" uid="uid://cdytuarpbfvhr" path="res://scripts/managers/DialogManager.cs" id="11_8ipbj"]
 [ext_resource type="Texture2D" uid="uid://cdy7lua7jh6k2" path="res://assets/Sprout Lands - UI Pack - Basic pack/Sprite sheets/Setting menu.png" id="14_c82hy"]
+[ext_resource type="Texture2D" uid="uid://c7x43vf0yevgw" path="res://assets/Sprout Lands - UI Pack - Basic pack/Sprite sheets/Dialouge UI/Premade dialog box small.png" id="15_65jmh"]
 [ext_resource type="Script" uid="uid://rnj37sdde2lc" path="res://scripts/UI/DialogContainer.cs" id="15_fn8lc"]
+[ext_resource type="FontFile" uid="uid://c8amdyg2u5cxm" path="res://assets/Sprout Lands - UI Pack - Basic pack/fonts/pixelFont-7-8x14-sproutLands.ttf" id="16_65jmh"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_evhkr"]
 texture = ExtResource("5_ax07c")
@@ -446,6 +448,32 @@ texture_margin_right = 5.0
 texture_margin_bottom = 5.0
 region_rect = Rect2(138.01448, 10.987924, 108.65312, 124.68722)
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fn8lc"]
+texture = ExtResource("14_c82hy")
+texture_margin_left = 5.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 5.0
+region_rect = Rect2(137.41016, 10.66271, 109.108765, 125.30158)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_d4m4s"]
+texture = ExtResource("15_65jmh")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+region_rect = Rect2(7.8066025, 6.7465057, 48.192917, 48.57846)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wghl8"]
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="LabelSettings" id="LabelSettings_fn8lc"]
+font = ExtResource("16_65jmh")
+font_size = 12
+font_color = Color(0.18000486, 0.18000486, 0.18000486, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6ckq1"]
+
 [node name="Root" type="Node2D"]
 metadata/_edit_vertical_guides_ = [288.0]
 
@@ -528,6 +556,7 @@ layout_mode = 2
 
 [node name="DialogContainer" type="Control" parent="CanvasLayer/Control/UI"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 script = ExtResource("15_fn8lc")
 
@@ -597,6 +626,7 @@ theme_override_styles/disabled = SubResource("StyleBoxEmpty_nkpe3")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_hsllc")
 
 [node name="ChoiceContainer" type="PanelContainer" parent="CanvasLayer/Control/UI/DialogContainer"]
+visible = false
 custom_minimum_size = Vector2(100, 60)
 layout_mode = 1
 anchors_preset = 8
@@ -616,6 +646,90 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_8ipbj")
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 size_flags_horizontal = 4
+
+[node name="LeftAvatar" type="PanelContainer" parent="CanvasLayer/Control/UI/DialogContainer"]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -312.0
+offset_top = -156.0
+offset_right = -222.0
+offset_bottom = -45.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxTexture_fn8lc")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/UI/DialogContainer/LeftAvatar"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Avatar" type="PanelContainer" parent="CanvasLayer/Control/UI/DialogContainer/LeftAvatar/VBoxContainer"]
+custom_minimum_size = Vector2(80, 80)
+layout_direction = 4
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_d4m4s")
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control/UI/DialogContainer/LeftAvatar/VBoxContainer/Avatar"]
+layout_mode = 2
+texture = SubResource("AtlasTexture_wghl8")
+
+[node name="Name" type="Label" parent="CanvasLayer/Control/UI/DialogContainer/LeftAvatar/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+label_settings = SubResource("LabelSettings_fn8lc")
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="RightAvatar" type="PanelContainer" parent="CanvasLayer/Control/UI/DialogContainer"]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 224.0
+offset_top = -156.0
+offset_right = 314.0
+offset_bottom = -45.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxTexture_fn8lc")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/UI/DialogContainer/RightAvatar"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Avatar" type="PanelContainer" parent="CanvasLayer/Control/UI/DialogContainer/RightAvatar/VBoxContainer"]
+custom_minimum_size = Vector2(80, 80)
+layout_direction = 4
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_d4m4s")
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control/UI/DialogContainer/RightAvatar/VBoxContainer/Avatar"]
+layout_mode = 2
+texture = SubResource("AtlasTexture_6ckq1")
+
+[node name="Name" type="Label" parent="CanvasLayer/Control/UI/DialogContainer/RightAvatar/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+label_settings = SubResource("LabelSettings_fn8lc")
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+text_overrun_behavior = 3
 
 [node name="ManagerContainer" type="Node" parent="."]
 

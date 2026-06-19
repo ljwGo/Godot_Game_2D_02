@@ -32,17 +32,45 @@ namespace Game
 
 		public void Test()
 		{
-			DialogNode node1 = new DialogNode() { text = "这是第一句对话话话话话话话话话话话话话话话话话话话话话话话话话话话。", type = DialogNodeType.Choice };
-			DialogNode node2 = new DialogNode() { text = "这是第二句" };
-			DialogNode node3 = new DialogNode() { text = "这是第三句" };
-			DialogNode node4 = new DialogNode() { text = "这是第四句" };
-			DialogNode node5 = new DialogNode() { text = "这是第五句" };
+			Resource cat = ResourceLoader.Load<Resource>("res://tres/UI/avatar/cat.tres");
+			Resource eggBoy = ResourceLoader.Load<Resource>("res://tres/UI/avatar/egg_boy.tres");
 
-			node1.edges = new List<AbstractEdge<DialogNode>>() {
-				new DialogEdge() { to = node2, choiceText = "正确" },
-				new DialogEdge() { to = node3, choiceText = "错误" },
+			DialogNode node1 = new DialogNode()
+			{
+				text = "你好呀, 我是猫猫",
+				name = "猫猫",
+				avatarShowPos = AvatarShowPosition.Left,
+				avatarResource = cat,
+				avatarPos = new Vector2(0, 0),
+				avatarSize = new Vector2(32, 32),
 			};
 
+			DialogNode node2 = new DialogNode() { 
+				text = "你好呀, 我是蛋蛋男孩", 
+				name = "蛋蛋男孩", 
+				avatarShowPos = AvatarShowPosition.Right, 
+				avatarResource = eggBoy, 
+				avatarPos = new Vector2(0, 0), 
+				avatarSize = new Vector2(40, 40) 
+			};
+
+			DialogNode node3 = new DialogNode()
+			{
+				text = "你有看到一个头戴帽子的女孩吗?",
+				name = "猫猫",
+				avatarShowPos = AvatarShowPosition.Left,
+				avatarResource = cat,
+				avatarPos = new Vector2(0, 0),
+				avatarSize = new Vector2(32, 32),
+			};
+
+			DialogNode node4 = new DialogNode() { text = "两人相视而笑" };
+
+			node1.edges = new List<AbstractEdge<DialogNode>>() { new DialogEdge { to = node2 } };
+			node2.edges = new List<AbstractEdge<DialogNode>>() { new DialogEdge { to = node3 } };
+			node3.edges = new List<AbstractEdge<DialogNode>>() { new DialogEdge { to = node4 } };
+
+			dialogContainer.Open();
 			Start(new DialogGraphics(node1));
 		}
 
@@ -59,6 +87,17 @@ namespace Game
 		{
 			this.dialogGraphics = dialogGraphics;
 			dialogContainer.Show(dialogGraphics.CurrentNode.text, ShowSpeed);
+			if (dialogGraphics.CurrentNode.avatarResource != null)
+			{
+				dialogContainer.ShowAvatar(
+					dialogGraphics.CurrentNode.avatarShowPos,
+					dialogGraphics.CurrentNode.avatarResource,
+					dialogGraphics.CurrentNode.avatarPos,
+					dialogGraphics.CurrentNode.avatarSize,
+					dialogGraphics.CurrentNode.name,
+					dialogGraphics.CurrentNode.isAvatarFlip
+				);
+			}
 		}
 
 		// 下一个节点
@@ -68,6 +107,19 @@ namespace Game
 			{
 				dialogGraphics.Next(ix);
 				dialogContainer.Show(dialogGraphics.CurrentNode.text, ShowSpeed);
+
+				dialogContainer.HideAllAvatar();
+				if (dialogGraphics.CurrentNode.avatarResource != null)
+				{
+					dialogContainer.ShowAvatar(
+						dialogGraphics.CurrentNode.avatarShowPos,
+						dialogGraphics.CurrentNode.avatarResource,
+						dialogGraphics.CurrentNode.avatarPos,
+						dialogGraphics.CurrentNode.avatarSize,
+						dialogGraphics.CurrentNode.name,
+						dialogGraphics.CurrentNode.isAvatarFlip
+					);
+				}
 			}
 		}
 
