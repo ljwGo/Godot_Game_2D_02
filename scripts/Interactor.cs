@@ -1,7 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using Game.Utils;
+using Utils;
 
 namespace Game
 {

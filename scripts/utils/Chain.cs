@@ -1,7 +1,7 @@
 using Godot;
 using System.Collections.Generic;
 
-namespace Game.Utils
+namespace Utils
 {
   // 1. 定义处理者的接口
   public interface IHandler<T>

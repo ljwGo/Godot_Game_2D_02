@@ -1,118 +1,132 @@
-using Game.Utils;
+using Data;
 using Godot;
-using System;
 using System.Collections.Generic;
+using Utils;
 
-public class DialogNode : AbstractGraphics<DialogNode>
+namespace Game
 {
-	public string text;
-}
 
-public class DialogGraphics
-{
-	// 当前对话节点
-	public DialogNode CurrentNode { get; private set; }
-	// 初始对话节点
-	public DialogNode InitNode { get; private set; }
-
-	public DialogGraphics(DialogNode initNode)
+	public partial class DialogChoiceClickArgs : RefCounted
 	{
-		this.InitNode = initNode;
-		this.CurrentNode = initNode;
+		public DialogEdge edge;
 	}
 
-	public bool HasNeighbour(int ix)
+	public partial class DialogManager : Node
 	{
-		return CurrentNode.vectorNeighbours != null && 0 <= ix && ix < CurrentNode.vectorNeighbours.Count;
-	}
+		[Export] public float ShowSpeed = 0.02f;
 
-	public void Next(int ix = 0)
-	{
-		if (CurrentNode.vectorNeighbours == null || ix >= CurrentNode.vectorNeighbours.Count) return;
-		CurrentNode = CurrentNode.vectorNeighbours[ix];
-	}
-}
+		DialogGraphics dialogGraphics;
+		DialogContainer dialogContainer;
 
-public partial class DialogManager : Node
-{
-	[Export] public float ShowSpeed = 0.1f;
+		[Signal] public delegate void DialogChoiceClickEventHandler(DialogChoiceClickArgs args);
 
-	DialogGraphics dialogGraphics;
-	DialogContainer dialogContainer;
-
-	public override void _Ready()
-	{
-		dialogContainer = GetNode<DialogContainer>("%DialogContainer");
-
-		Init();
-
-		// 测试用
-		Test();
-	}
-
-	public void Test()
-	{
-		DialogNode node1 = new DialogNode() { text = "这是第一句对话话话话话话话话话话话话话话话话话话话话话话话话话话话。" };
-		DialogNode node2 = new DialogNode() { text = "这是第二句对话话话话话话话话话话话话话[color=#ff0000]话话话话话话话话话话[/color]话话话话话话话话话话话话话话话话话话话话话话话话话话话话话话话。" };
-		DialogNode node3 = new DialogNode() { text = "这是第三句对话话话话话话话话话话话话话话话话话话话话话话话话话话话。" };
-
-		node1.vectorNeighbours = new List<DialogNode>() { node2 };
-		node2.vectorNeighbours = new List<DialogNode>() { node3 };
-
-		Start(new DialogGraphics(node1));
-	}
-
-	public void Init()
-	{
-		dialogContainer.Connect("NextIndicateClicked", new Callable(this, "OnNextIndicateClicked"));
-		dialogContainer.Connect("TextShowStart", new Callable(this, "OnTextShowStart"));
-		dialogContainer.Connect("TextAllDisplayed", new Callable(this, "OnTextAllDisplayed"));
-		dialogContainer.Connect("TextAreaClick", new Callable(this, "OnTextAreaClicked"));
-	}
-
-	// 开启一个新的对话图
-	public void Start(DialogGraphics dialogGraphics)
-	{
-		this.dialogGraphics = dialogGraphics;
-		dialogContainer.Show(dialogGraphics.CurrentNode.text, ShowSpeed);
-	}
-
-	// 下一个节点
-	public void Next(int ix = 0)
-	{
-		if (!dialogContainer.IsShowing() && dialogGraphics.HasNeighbour(ix))
+		public override void _Ready()
 		{
-			dialogGraphics.Next(ix);
+			dialogContainer = GetNode<DialogContainer>("%DialogContainer");
+
+			Init();
+
+			// 测试用
+			Test();
+		}
+
+		public void Test()
+		{
+			DialogNode node1 = new DialogNode() { text = "这是第一句对话话话话话话话话话话话话话话话话话话话话话话话话话话话。", type = DialogNodeType.Choice };
+			DialogNode node2 = new DialogNode() { text = "这是第二句" };
+			DialogNode node3 = new DialogNode() { text = "这是第三句" };
+			DialogNode node4 = new DialogNode() { text = "这是第四句" };
+			DialogNode node5 = new DialogNode() { text = "这是第五句" };
+
+			node1.edges = new List<AbstractEdge<DialogNode>>() {
+				new DialogEdge() { to = node2, choiceText = "正确" },
+				new DialogEdge() { to = node3, choiceText = "错误" },
+			};
+
+			Start(new DialogGraphics(node1));
+		}
+
+		public void Init()
+		{
+			dialogContainer.Connect("NextIndicateClicked", new Callable(this, "OnNextIndicateClicked"));
+			dialogContainer.Connect("TextShowStart", new Callable(this, "OnTextShowStart"));
+			dialogContainer.Connect("TextAllDisplayed", new Callable(this, "OnTextAllDisplayed"));
+			dialogContainer.Connect("TextAreaClick", new Callable(this, "OnTextAreaClicked"));
+		}
+
+		// 开启一个新的对话图
+		public void Start(DialogGraphics dialogGraphics)
+		{
+			this.dialogGraphics = dialogGraphics;
 			dialogContainer.Show(dialogGraphics.CurrentNode.text, ShowSpeed);
 		}
-	}
 
-	public void OnNextIndicateClicked()
-	{
-		Next(0);
-	}
-
-	public void OnTextShowStart()
-	{
-		dialogContainer.HideNextIndicate();
-	}
-
-	public void OnTextAllDisplayed()
-	{
-		if (dialogGraphics.HasNeighbour(0))
+		// 下一个节点
+		public void Next(int ix = 0)
 		{
-			dialogContainer.ShowNextIndicate();
+			if (!dialogContainer.IsShowing() && dialogGraphics.HasNeighbour(ix))
+			{
+				dialogGraphics.Next(ix);
+				dialogContainer.Show(dialogGraphics.CurrentNode.text, ShowSpeed);
+			}
 		}
-	}
 
-	public void OnTextAreaClicked() {
-		if (dialogContainer.IsShowing())
+		public void OnNextIndicateClicked()
 		{
-			dialogContainer.ShowInstance(dialogGraphics.CurrentNode.text);
+			Next(0);
 		}
-		else if (!dialogGraphics.HasNeighbour(0))
+
+		public void OnTextShowStart()
 		{
-			dialogContainer.Close();
+			dialogContainer.HideNextIndicate();
+			dialogContainer.HideChoices();
+		}
+
+		public void OnTextAllDisplayed()
+		{
+			if (!dialogGraphics.HasNeighbour(0)) return;
+
+			DialogNodeType nodeType = dialogGraphics.CurrentNode.type;
+			switch (nodeType)
+			{
+				case DialogNodeType.Normal:
+					dialogContainer.HideChoices();
+					dialogContainer.ShowNextIndicate();
+					break;
+				case DialogNodeType.Choice:
+					dialogContainer.ShowChoices();
+					dialogContainer.HideNextIndicate();
+					VBoxContainer vBox = dialogContainer.GetNode<VBoxContainer>("ChoiceContainer/VBoxContainer");
+
+					// 生成选项按钮
+					for (int i = 0; i < dialogGraphics.CurrentNode.edges.Count; i++)
+					{
+						AbstractEdge<DialogNode> edge = dialogGraphics.CurrentNode.edges[i];
+						string text = (edge as DialogEdge).choiceText;
+						int ix = i; // 注意闭包问题, 需要复制一份 ix
+
+						dialogContainer.AddChoice(text, () =>
+						{
+							dialogContainer.HideChoices();
+							Next(ix);
+
+							EmitSignal(SignalName.DialogChoiceClick, new DialogChoiceClickArgs() { edge = edge as DialogEdge });
+						});
+					}
+					break;
+			}
+		}
+
+		public void OnTextAreaClicked()
+		{
+			if (dialogContainer.IsShowing())
+			{
+				dialogContainer.ShowInstance(dialogGraphics.CurrentNode.text);
+			}
+			else if (!dialogGraphics.HasNeighbour(0))
+			{
+				dialogContainer.Close();
+			}
 		}
 	}
 }

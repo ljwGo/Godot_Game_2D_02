@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=4 uid="uid://bx275i012lm3i"]
+[gd_scene load_steps=32 format=4 uid="uid://bx275i012lm3i"]
 
 [ext_resource type="TileSet" uid="uid://cfiqxdctej66w" path="res://tres/floor.tres" id="1_b8pkg"]
 [ext_resource type="PackedScene" uid="uid://du5eumro16dyo" path="res://scene/player.tscn" id="2_soann"]
@@ -420,14 +420,6 @@ region_rect = Rect2(138, 11, 108, 124)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8ipbj"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_s2s38"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q6d23"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nkpe3"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hsllc"]
-
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fn8lc"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_65jmh"]
@@ -438,7 +430,24 @@ region_rect = Rect2(138, 11, 108, 124)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6ckq1"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_s2s38"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q6d23"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nkpe3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hsllc"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8ipbj"]
+texture = ExtResource("14_c82hy")
+texture_margin_left = 5.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 5.0
+region_rect = Rect2(138.01448, 10.987924, 108.65312, 124.68722)
+
 [node name="Root" type="Node2D"]
+metadata/_edit_vertical_guides_ = [288.0]
 
 [node name="Game" type="Node2D" parent="."]
 y_sort_enabled = true
@@ -522,110 +531,91 @@ unique_name_in_owner = true
 layout_mode = 2
 script = ExtResource("15_fn8lc")
 
-[node name="Bg" type="PanelContainer" parent="CanvasLayer/Control/UI/DialogContainer"]
+[node name="TextContainer" type="PanelContainer" parent="CanvasLayer/Control/UI/DialogContainer"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -206.0
-offset_top = -163.0
-offset_right = 204.0
+offset_left = -208.0
+offset_top = -148.0
+offset_right = 210.0
+offset_bottom = -4.0
 grow_horizontal = 2
 grow_vertical = 0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_styles/panel = SubResource("StyleBoxTexture_jhc4n")
 
-[node name="TextArea" type="Button" parent="CanvasLayer/Control/UI/DialogContainer"]
-layout_direction = 4
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -200.0
-offset_top = -153.0
-offset_right = 200.0
-offset_bottom = -38.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_styles/normal = SubResource("StyleBoxEmpty_8ipbj")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_s2s38")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_q6d23")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_nkpe3")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_hsllc")
-
-[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/Control/UI/DialogContainer/TextArea"]
-custom_minimum_size = Vector2(400, 120)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -60.0
-offset_right = 200.0
-offset_bottom = 60.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/UI/DialogContainer/TextContainer"]
+layout_mode = 2
 size_flags_horizontal = 4
-size_flags_vertical = 4
-mouse_filter = 1
+
+[node name="ContentArea" type="RichTextLabel" parent="CanvasLayer/Control/UI/DialogContainer/TextContainer/VBoxContainer"]
+custom_minimum_size = Vector2(400, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
 bbcode_enabled = true
-text = "
-"
 
-[node name="ConfirmList" type="HBoxContainer" parent="CanvasLayer/Control/UI/DialogContainer"]
-visible = false
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -20.0
-offset_top = -40.0
-offset_right = 20.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_constants/separation = 32
-alignment = 1
-
-[node name="NextIndicate" type="Button" parent="CanvasLayer/Control/UI/DialogContainer"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -20.0
-offset_top = -29.0
-offset_right = 22.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_styles/normal = SubResource("StyleBoxEmpty_fn8lc")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_65jmh")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_d4m4s")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_wghl8")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_6ckq1")
-
-[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/Control/UI/DialogContainer/NextIndicate"]
+[node name="Button" type="Button" parent="CanvasLayer/Control/UI/DialogContainer/TextContainer/VBoxContainer/ContentArea"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 1
+theme_override_styles/normal = SubResource("StyleBoxEmpty_8ipbj")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_fn8lc")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_65jmh")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_d4m4s")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_wghl8")
+
+[node name="NextIndicate" type="RichTextLabel" parent="CanvasLayer/Control/UI/DialogContainer/TextContainer/VBoxContainer"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 bbcode_enabled = true
 text = "[wave]▼[/wave]"
 scroll_active = false
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Button" type="Button" parent="CanvasLayer/Control/UI/DialogContainer/TextContainer/VBoxContainer/NextIndicate"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_6ckq1")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_s2s38")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_q6d23")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_nkpe3")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hsllc")
+
+[node name="ChoiceContainer" type="PanelContainer" parent="CanvasLayer/Control/UI/DialogContainer"]
+custom_minimum_size = Vector2(100, 60)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -30.0
+offset_right = 50.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_8ipbj")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/UI/DialogContainer/ChoiceContainer"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+size_flags_horizontal = 4
 
 [node name="ManagerContainer" type="Node" parent="."]
 

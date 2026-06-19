@@ -5,8 +5,11 @@ using UI;
 public partial class DialogContainer : Control
 {
   RichTextLabel contentLabel;
-  Button indicate;
-  Button textArea;
+  RichTextLabel indicateLabel;
+  Button indicateBtn;
+  Button textAreaBtn;
+  PanelContainer choiceContainer;
+  VBoxContainer vChoicesBox;
 
   Tween tween;
 
@@ -18,12 +21,18 @@ public partial class DialogContainer : Control
 
   public override void _Ready()
   {
-    contentLabel = GetNode<RichTextLabel>("TextArea/RichTextLabel");
-    indicate = GetNode<Button>("NextIndicate");
-    textArea = GetNode<Button>("TextArea");
+    VBoxContainer vBoxContainer = GetNode<VBoxContainer>("TextContainer/VBoxContainer");
+    contentLabel = vBoxContainer.GetNode<RichTextLabel>("ContentArea");
+    indicateLabel = vBoxContainer.GetNode<RichTextLabel>("NextIndicate");
+    
+    indicateBtn = indicateLabel.GetNode<Button>("Button");
+    textAreaBtn = contentLabel.GetNode<Button>("Button");
 
-    indicate.Connect("button_down", new Callable(this, "OnNextIndicateClicked"));
-    textArea.Connect("button_down", new Callable(this, "OnTextAreaClicked"));
+    choiceContainer = GetNode<PanelContainer>("ChoiceContainer");
+    vChoicesBox = choiceContainer.GetNode<VBoxContainer>("VBoxContainer");
+
+    indicateBtn.Connect("button_down", new Callable(this, "OnNextIndicateClicked"));
+    textAreaBtn.Connect("button_down", new Callable(this, "OnTextAreaClicked"));
   }
 
   public void Open() {
@@ -93,12 +102,36 @@ public partial class DialogContainer : Control
     EmitSignal(SignalName.TextAreaClick);
   }
 
+  public void ShowChoices() {
+    choiceContainer.Visible = true;
+  }
+
+  public void HideChoices() {
+    choiceContainer.Visible = false;
+  }
+
   public void ShowNextIndicate()
   {
-    indicate.Visible = true;
+    indicateLabel.Visible = true;
   }
 
   public void HideNextIndicate() {
-    indicate.Visible = false;
+    indicateLabel.Visible = false;
+  }
+
+  public void ClearChoices() {
+    foreach (Button button in vChoicesBox.GetChildren())
+    {
+      button.QueueFree();
+    }
+  }
+
+  public void AddChoice(string choiceText, Action onClick)
+  {
+    Button choiceButton = new Button();
+    choiceButton.Text = choiceText;
+    choiceButton.Connect("button_down", Callable.From(onClick));
+
+    vChoicesBox.AddChild(choiceButton);
   }
 }
