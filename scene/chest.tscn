@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://csgxih81mrsi1"]
+[gd_scene load_steps=24 format=3 uid="uid://csgxih81mrsi1"]
 
 [ext_resource type="Texture2D" uid="uid://c5khvtxgmea4t" path="res://assets/Sprout Lands - Sprites - Basic pack/Objects/Chest.png" id="1_26f88"]
 [ext_resource type="Script" uid="uid://dd2ingx3blumg" path="res://scripts/Chest.cs" id="1_26vdv"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://cxo1l7lsfrc88" path="res://scripts/LootDroppable.cs" id="4_26vdv"]
 [ext_resource type="PackedScene" uid="uid://djokncm6nma0o" path="res://scene/wood.tscn" id="5_num40"]
 [ext_resource type="Script" uid="uid://b5o0k3lowpuwg" path="res://resource/LootItemParam.cs" id="6_pqyof"]
+[ext_resource type="Script" uid="uid://o4tlf6fpl316" path="res://scripts/Openable.cs" id="7_pqyof"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ax07c"]
 size = Vector2(14, 12)
@@ -154,4 +155,8 @@ maxDropRadius = 25.0
 jumpHeight = 20.0
 duration = 1.0
 
+[node name="Openable" type="Node" parent="."]
+script = ExtResource("7_pqyof")
+
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="OnAnimationFinished"]
+[connection signal="BeOpened" from="Openable" to="." method="OnBeOpened"]

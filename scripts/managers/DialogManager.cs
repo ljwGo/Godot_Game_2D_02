@@ -27,7 +27,7 @@ namespace Game
 			Init();
 
 			// 测试用
-			Test();
+			// Test();
 		}
 
 		public void Test()
@@ -45,13 +45,14 @@ namespace Game
 				avatarSize = new Vector2(32, 32),
 			};
 
-			DialogNode node2 = new DialogNode() { 
-				text = "你好呀, 我是蛋蛋男孩", 
-				name = "蛋蛋男孩", 
-				avatarShowPos = AvatarShowPosition.Right, 
-				avatarResource = eggBoy, 
-				avatarPos = new Vector2(0, 0), 
-				avatarSize = new Vector2(40, 40) 
+			DialogNode node2 = new DialogNode()
+			{
+				text = "你好呀, 我是蛋蛋男孩",
+				name = "蛋蛋男孩",
+				avatarShowPos = AvatarShowPosition.Right,
+				avatarResource = eggBoy,
+				avatarPos = new Vector2(0, 0),
+				avatarSize = new Vector2(40, 40)
 			};
 
 			DialogNode node3 = new DialogNode()
@@ -70,8 +71,8 @@ namespace Game
 			node2.edges = new List<AbstractEdge<DialogNode>>() { new DialogEdge { to = node3 } };
 			node3.edges = new List<AbstractEdge<DialogNode>>() { new DialogEdge { to = node4 } };
 
-			dialogContainer.Open();
-			Start(new DialogGraphics(node1));
+			OpenDialog();
+			NewDialog(new DialogGraphics(node1));
 		}
 
 		public void Init()
@@ -83,7 +84,7 @@ namespace Game
 		}
 
 		// 开启一个新的对话图
-		public void Start(DialogGraphics dialogGraphics)
+		public void NewDialog(DialogGraphics dialogGraphics)
 		{
 			this.dialogGraphics = dialogGraphics;
 			dialogContainer.Show(dialogGraphics.CurrentNode.text, ShowSpeed);
@@ -121,6 +122,11 @@ namespace Game
 					);
 				}
 			}
+		}
+
+		public void OpenDialog()
+		{
+			dialogContainer.Open();
 		}
 
 		public void OnNextIndicateClicked()

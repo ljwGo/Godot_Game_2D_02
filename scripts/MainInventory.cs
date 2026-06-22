@@ -31,7 +31,7 @@ namespace Game
 			Stackable stackable = item.GetParent().GetNodeOrNull<Stackable>("Stackable");
 
 			sprite.Texture = sprite2D.Texture;
-			tile.SetQuantity(stackable != null ? stackable.currentStackSize : 2);
+			tile.SetQuantity(stackable != null ? stackable.currentStackSize : 1);
 		}
 
 		void GenerateSlots()

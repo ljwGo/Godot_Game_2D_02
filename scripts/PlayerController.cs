@@ -14,12 +14,18 @@ namespace Game
 		AnimatedSprite2D _animatedSprite;
 		MainInventory mainInventory;
 		Area2D interactPoint;
+		Inventory inventory;
+		Picker picker;
 
 		public override void _Ready()
 		{
 			_animatedSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 			mainInventory = GetNodeOrNull<MainInventory>("%MainInventory");
 			interactPoint = GetNode<Area2D>("InteractPoint");
+			inventory = GetNode<Inventory>("Inventory");
+			picker = GetNodeOrNull<Picker>("Picker");
+
+			Init();
 		}
 
 		public override void _PhysicsProcess(double delta)
@@ -40,6 +46,12 @@ namespace Game
 			// 这里可以处理一些非物理相关的逻辑，比如交互提示、状态更新等
 		}
 
+		public void Init() {
+			picker.CanPick = (Pickable pickable) => {
+				return true;
+			};
+		}
+
 		public void OnInteractStart(InteractEventHandlerParams @params, Interactor interactor)
 		{
 			foreach (var interactive in @params.interactivesInRange)
@@ -49,7 +61,9 @@ namespace Game
 				if (interactiveParent != null && interactorParent != null)
 				{
 					// 伐木
-					MayDoChop(@params, interactor);
+					// MayDoChop(@params, interactor);
+					// MayDoOpen(interactiveParent, interactorParent);
+					MayDoPick(interactiveParent, interactorParent);
 				}
 			}
 			// MayDoPlow(@params, interactor);
@@ -175,6 +189,33 @@ namespace Game
 			}
 		}
 
+		public bool CanPick(Pickable pickable) {
+			InventoryItem inventoryItem = pickable.GetParent().GetNode<InventoryItem>("InventoryItem");
+			return inventory.CanAddItem(inventoryItem, out _);
+		}
+
+		private void MayDoOpen(Node interactiveParent, Node interactorParent)
+		{
+			Openable openable = interactiveParent.GetNodeOrNull<Openable>("Openable");
+			Opener opener = interactorParent.GetNodeOrNull<Opener>("Opener");
+
+			if (openable != null && opener != null)
+			{
+				opener.MayDoOpen(openable);
+			}
+		}
+
+		private void MayDoPick(Node interactiveParent, Node interactorParent)
+		{
+			Picker picker = interactorParent.GetNodeOrNull<Picker>("Picker");
+			Pickable pickable = interactiveParent.GetNodeOrNull<Pickable>("Pickable");
+
+			if (picker != null && pickable != null)
+			{
+				picker.MayDoPick(pickable);
+			}
+		}
+
 		private void MayDoChop(InteractEventHandlerParams @params, Interactor interactor)
 		{
 			var parent = interactor.GetParent();
@@ -233,6 +274,12 @@ namespace Game
 		{
 			// 这里可以显示一个提示，告诉玩家背包满了
 			GD.Print("Cannot add " + item.itemName + " to inventory: Inventory is full!");
+		}
+
+		public void OnPickUp(Picker picker, Pickable pickable)
+		{
+			InventoryItem inventoryItem = pickable.GetParent().GetNode<InventoryItem>("InventoryItem");
+			inventory.AddItemRecursive(inventoryItem);
 		}
 	}
 }

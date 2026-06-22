@@ -23,7 +23,7 @@ namespace Data
 	public class DialogNode : AbstractGraphics<DialogNode>
 	{
 		public string text;
-		public DialogNodeType type;
+		public DialogNodeType type = DialogNodeType.Normal;
 
 		public AvatarShowPosition avatarShowPos;
 		public string name;

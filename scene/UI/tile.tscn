@@ -40,6 +40,6 @@ size_flags_vertical = 0
 theme_override_constants/line_spacing = 0
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxEmpty_h56yl")
-text = "20"
+text = "0"
 label_settings = SubResource("LabelSettings_h56yl")
 horizontal_alignment = 2

@@ -27,6 +27,10 @@ namespace Game
 			lootDroppable.DoDropLoot();
 		}
 
+		public void OnBeOpened(Opener opener, Openable openable) {
+			PlayOpenAnimation();
+		}
+
 		public void OnAnimationFinished()
 		{
 			string animationName = _animatedSprite2D.Animation;

@@ -1,0 +1,33 @@
+[gd_scene load_steps=7 format=3 uid="uid://5ystchq5x05b"]
+
+[ext_resource type="Script" uid="uid://bi6r1wr6fkypc" path="res://scripts/InventoryItem.cs" id="1_4nj1f"]
+[ext_resource type="Texture2D" uid="uid://c5la3silhrglh" path="res://tres/ax.tres" id="2_3tmcv"]
+[ext_resource type="Script" uid="uid://yvo3nii1fd5s" path="res://scripts/LootDrop.cs" id="3_t0tg6"]
+[ext_resource type="Script" uid="uid://dj8k6fi6qix33" path="res://scripts/Pickable.cs" id="4_0cmvu"]
+[ext_resource type="Script" uid="uid://ehkdg5vdn8d6" path="res://scripts/Interactive.cs" id="5_0cmvu"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_kkxk7"]
+radius = 16.0
+
+[node name="PickableLoot" type="Node2D"]
+
+[node name="InventoryItem" type="Node" parent="."]
+script = ExtResource("1_4nj1f")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_3tmcv")
+
+[node name="Shadow" type="Sprite2D" parent="."]
+
+[node name="LootDrop" type="Node" parent="."]
+script = ExtResource("3_t0tg6")
+
+[node name="Pickable" type="Node" parent="."]
+script = ExtResource("4_0cmvu")
+
+[node name="Interactive" type="Area2D" parent="."]
+collision_layer = 4
+script = ExtResource("5_0cmvu")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactive"]
+shape = SubResource("CircleShape2D_kkxk7")

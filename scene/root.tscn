@@ -11,8 +11,8 @@
 [ext_resource type="PackedScene" uid="uid://csgxih81mrsi1" path="res://scene/chest.tscn" id="8_evhkr"]
 [ext_resource type="PackedScene" uid="uid://cnm5m1d8q7ood" path="res://scene/UI/slot.tscn" id="8_swljk"]
 [ext_resource type="Texture2D" uid="uid://48p67xc1tlj8" path="res://assets/Sprout Lands - UI Pack - Basic pack/emojis-free/emoji style ui/Inventory_Blocks_Spritesheet.png" id="8_y7soe"]
+[ext_resource type="PackedScene" uid="uid://cc1nr1hx5c6h1" path="res://scene/loot/axe.tscn" id="9_65jmh"]
 [ext_resource type="Script" uid="uid://c6ypa7cv4p1tt" path="res://scripts/MainInventory.cs" id="9_ax07c"]
-[ext_resource type="PackedScene" uid="uid://5ystchq5x05b" path="res://scene/tool.tscn" id="9_nn232"]
 [ext_resource type="Script" uid="uid://cdytuarpbfvhr" path="res://scripts/managers/DialogManager.cs" id="11_8ipbj"]
 [ext_resource type="Texture2D" uid="uid://cdy7lua7jh6k2" path="res://assets/Sprout Lands - UI Pack - Basic pack/Sprite sheets/Setting menu.png" id="14_c82hy"]
 [ext_resource type="Texture2D" uid="uid://c7x43vf0yevgw" path="res://assets/Sprout Lands - UI Pack - Basic pack/Sprite sheets/Dialouge UI/Premade dialog box small.png" id="15_65jmh"]
@@ -515,8 +515,8 @@ position_smoothing_enabled = true
 [node name="Chest" parent="Game" instance=ExtResource("8_evhkr")]
 position = Vector2(-65, 28)
 
-[node name="AX" parent="Game" instance=ExtResource("9_nn232")]
-position = Vector2(-65, 20)
+[node name="AXE" parent="Game" instance=ExtResource("9_65jmh")]
+position = Vector2(88, 96)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -732,6 +732,7 @@ clip_text = true
 text_overrun_behavior = 3
 
 [node name="ManagerContainer" type="Node" parent="."]
+unique_name_in_owner = true
 
 [node name="UIManager" type="Node" parent="ManagerContainer"]
 script = ExtResource("7_ax07c")
