@@ -7,7 +7,7 @@ public partial class Opener : Node
 
   [Signal] public delegate void OpenEventHandler(Opener opener, Openable openable);
 
-  public void MayDoOpen(Openable openable)
+  public bool MayDoOpen(Openable openable)
   {
     if (CanOpen(openable) && openable.CanOpen(this) && !openable.HasOpened)
     {
@@ -15,5 +15,6 @@ public partial class Opener : Node
       openable.EmitSignal(Openable.SignalName.BeOpened, this, openable);
       openable.HasOpened = true;
     }
+    return true;
   }
 }

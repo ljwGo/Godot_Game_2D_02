@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=3 uid="uid://5xro43mfgo8q"]
+
+[ext_resource type="PackedScene" uid="uid://5ystchq5x05b" path="res://scene/pickable_loot.tscn" id="1_f6qaj"]
+[ext_resource type="Texture2D" uid="uid://dm2ugkjjprjva" path="res://assets/Sprout Lands - Sprites - Basic pack/Objects/Basic tools and meterials.png" id="2_hijih"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gctyp"]
+atlas = ExtResource("2_hijih")
+region = Rect2(32, 0, 16, 16)
+
+[node name="Hoe" instance=ExtResource("1_f6qaj")]
+
+[node name="Sprite2D" parent="." index="1"]
+texture = SubResource("AtlasTexture_gctyp")

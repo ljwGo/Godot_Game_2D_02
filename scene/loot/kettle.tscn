@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=3 uid="uid://nkaovkg1qd53"]
+
+[ext_resource type="PackedScene" uid="uid://5ystchq5x05b" path="res://scene/pickable_loot.tscn" id="1_jlmk3"]
+[ext_resource type="Texture2D" uid="uid://dm2ugkjjprjva" path="res://assets/Sprout Lands - Sprites - Basic pack/Objects/Basic tools and meterials.png" id="2_j735s"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sdj5r"]
+atlas = ExtResource("2_j735s")
+region = Rect2(0, 0, 16, 16)
+
+[node name="Kettle" instance=ExtResource("1_jlmk3")]
+
+[node name="Sprite2D" parent="." index="1"]
+texture = SubResource("AtlasTexture_sdj5r")

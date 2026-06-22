@@ -42,13 +42,15 @@ namespace Game
 			return distance <= ChopRange;
 		}
 
-		public void MayPlayChopAnimation(Cuttable cuttable)
+		public bool MayPlayChopAnimation(Cuttable cuttable)
 		{
 			if (CanChop(cuttable))
 			{
 				currentTarget = cuttable;
 				PlayChopAnimation(cuttable);
+				return true;
 			}
+			return false;
 		}
 
 		public void MayDoChop(Cuttable cuttable)

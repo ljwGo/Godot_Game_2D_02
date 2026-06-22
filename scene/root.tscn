@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=4 uid="uid://bx275i012lm3i"]
+[gd_scene load_steps=41 format=4 uid="uid://bx275i012lm3i"]
 
 [ext_resource type="TileSet" uid="uid://cfiqxdctej66w" path="res://tres/floor.tres" id="1_b8pkg"]
 [ext_resource type="PackedScene" uid="uid://du5eumro16dyo" path="res://scene/player.tscn" id="2_soann"]
@@ -13,6 +13,8 @@
 [ext_resource type="Texture2D" uid="uid://48p67xc1tlj8" path="res://assets/Sprout Lands - UI Pack - Basic pack/emojis-free/emoji style ui/Inventory_Blocks_Spritesheet.png" id="8_y7soe"]
 [ext_resource type="PackedScene" uid="uid://cc1nr1hx5c6h1" path="res://scene/loot/axe.tscn" id="9_65jmh"]
 [ext_resource type="Script" uid="uid://c6ypa7cv4p1tt" path="res://scripts/MainInventory.cs" id="9_ax07c"]
+[ext_resource type="PackedScene" uid="uid://nkaovkg1qd53" path="res://scene/loot/kettle.tscn" id="10_wghl8"]
+[ext_resource type="PackedScene" uid="uid://5xro43mfgo8q" path="res://scene/loot/hoe.tscn" id="11_6ckq1"]
 [ext_resource type="Script" uid="uid://cdytuarpbfvhr" path="res://scripts/managers/DialogManager.cs" id="11_8ipbj"]
 [ext_resource type="Texture2D" uid="uid://cdy7lua7jh6k2" path="res://assets/Sprout Lands - UI Pack - Basic pack/Sprite sheets/Setting menu.png" id="14_c82hy"]
 [ext_resource type="Texture2D" uid="uid://c7x43vf0yevgw" path="res://assets/Sprout Lands - UI Pack - Basic pack/Sprite sheets/Dialouge UI/Premade dialog box small.png" id="15_65jmh"]
@@ -517,6 +519,12 @@ position = Vector2(-65, 28)
 
 [node name="AXE" parent="Game" instance=ExtResource("9_65jmh")]
 position = Vector2(88, 96)
+
+[node name="Kettle" parent="Game" instance=ExtResource("10_wghl8")]
+position = Vector2(136, 96)
+
+[node name="Hoe" parent="Game" instance=ExtResource("11_6ckq1")]
+position = Vector2(168, 64)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

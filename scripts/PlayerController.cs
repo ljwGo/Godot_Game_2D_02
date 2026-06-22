@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 namespace Game
@@ -16,6 +17,7 @@ namespace Game
 		Area2D interactPoint;
 		Inventory inventory;
 		Picker picker;
+		Interactor interactor;
 
 		public override void _Ready()
 		{
@@ -24,6 +26,7 @@ namespace Game
 			interactPoint = GetNode<Area2D>("InteractPoint");
 			inventory = GetNode<Inventory>("Inventory");
 			picker = GetNodeOrNull<Picker>("Picker");
+			interactor = GetNodeOrNull<Interactor>("Interactor");
 
 			Init();
 		}
@@ -46,28 +49,77 @@ namespace Game
 			// 这里可以处理一些非物理相关的逻辑，比如交互提示、状态更新等
 		}
 
-		public void Init() {
-			picker.CanPick = (Pickable pickable) => {
-				return true;
+		public override void _UnhandledInput(InputEvent @event)
+		{
+			// 只有当鼠标点击没被 UI 拦截时，这里才会运行
+			if (@event.IsActionPressed("interact"))
+			{
+				Interact();
+			}
+		}
+
+		public void Init()
+		{
+			picker.CanPick = CanPick;
+		}
+
+		public void Interact()
+		{
+			List<Interactive> sortedResults = GetNearInteractives();
+
+			if (MayDoPick(sortedResults, interactor)) return;
+			else if (MayDoChop(sortedResults, interactor)) return;
+			else if (MayDoOpen(sortedResults, interactor)) return;
+			// else if (MayDoPlow(sortedResults, interactor)) return;
+		}
+
+		public List<Interactive> GetNearInteractives() {
+			var shape = interactor.GetNode<CollisionShape2D>("InteractorScope").Shape as CircleShape2D;
+			var circle = new CircleShape2D
+			{
+				Radius = shape.Radius,
 			};
+
+			var query = new PhysicsShapeQueryParameters2D
+			{
+				Shape = circle,
+				Transform = Transform,
+				CollideWithAreas = true,
+				CollideWithBodies = false,
+				CollisionMask = 4
+			};
+
+			var spaceState = GetWorld2D().DirectSpaceState;
+			Vector2 centerPosition = interactor.Position;
+
+			// 1. 获取无序的原始物理检测结果
+			var rawResults = spaceState.IntersectShape(query, maxResults: 32);
+
+			var selectInteractorsFn = (Godot.Collections.Dictionary result) =>
+			{
+				var obj = result["collider"].AsGodotObject();
+				if (obj is Node2D node2D && node2D.GetParent() != null)
+				{
+					Node2D parentNode = node2D.GetParent() as Node2D;
+					return new {
+						Interactive = parentNode.GetNodeOrNull<Interactive>("Interactive"),
+						DistanceSq = parentNode.GlobalPosition.DistanceSquaredTo(centerPosition)
+					};
+				}
+				return null;
+			};
+
+			// 2. 使用 LINQ 按照与中心点的距离进行升序排序 (OrderBy)
+			return rawResults
+					.Select(selectInteractorsFn)
+					.Where((result) => result != null)
+					.OrderBy(item => item.DistanceSq) // 按距离平方升序排序（最近的在最前）
+					.Select((result) => result.Interactive)
+					.ToList();
 		}
 
 		public void OnInteractStart(InteractEventHandlerParams @params, Interactor interactor)
 		{
-			foreach (var interactive in @params.interactivesInRange)
-			{
-				var interactiveParent = interactive.GetParent();
-				var interactorParent = interactor.GetParent();
-				if (interactiveParent != null && interactorParent != null)
-				{
-					// 伐木
-					// MayDoChop(@params, interactor);
-					// MayDoOpen(interactiveParent, interactorParent);
-					MayDoPick(interactiveParent, interactorParent);
-				}
-			}
-			// MayDoPlow(@params, interactor);
-			// MayOpenChest(@params, interactor);
 		}
 
 		// 是否可吸收
@@ -189,77 +241,88 @@ namespace Game
 			}
 		}
 
-		public bool CanPick(Pickable pickable) {
+		public bool CanPick(Pickable pickable)
+		{
 			InventoryItem inventoryItem = pickable.GetParent().GetNode<InventoryItem>("InventoryItem");
 			return inventory.CanAddItem(inventoryItem, out _);
 		}
 
-		private void MayDoOpen(Node interactiveParent, Node interactorParent)
+		private bool MayDoOpen(List<Interactive> interactives, Interactor interactor)
 		{
-			Openable openable = interactiveParent.GetNodeOrNull<Openable>("Openable");
-			Opener opener = interactorParent.GetNodeOrNull<Opener>("Opener");
+			var interactorParent = interactor.GetParent();
+			if (interactorParent == null) return false;
 
-			if (openable != null && opener != null)
-			{
-				opener.MayDoOpen(openable);
-			}
-		}
-
-		private void MayDoPick(Node interactiveParent, Node interactorParent)
-		{
-			Picker picker = interactorParent.GetNodeOrNull<Picker>("Picker");
-			Pickable pickable = interactiveParent.GetNodeOrNull<Pickable>("Pickable");
-
-			if (picker != null && pickable != null)
-			{
-				picker.MayDoPick(pickable);
-			}
-		}
-
-		private void MayDoChop(InteractEventHandlerParams @params, Interactor interactor)
-		{
-			var parent = interactor.GetParent();
-			if (parent == null) return;
-
-			Faller faller = parent.GetNodeOrNull<Faller>("Faller");
-			if (faller == null) return;
-
-			foreach (var interactive in @params.interactivesInRange)
+			foreach (Interactive interactive in interactives)
 			{
 				var interactiveParent = interactive.GetParent();
 				if (interactiveParent == null) continue;
+
+				Openable openable = interactiveParent.GetNodeOrNull<Openable>("Openable");
+				Opener opener = interactorParent.GetNodeOrNull<Opener>("Opener");
+
+				if (openable != null && opener != null)
+				{
+					return opener.MayDoOpen(openable);
+				}
+			}
+			return false;
+		}
+
+		private bool MayDoPick(List<Interactive> interactives, Interactor interactor)
+		{
+			var interactorParent = interactor.GetParent();
+			if (interactorParent == null) return false;
+
+			foreach (Interactive interactive in interactives)
+			{
+				var interactiveParent = interactive.GetParent();
+				if (interactiveParent == null) continue;
+
+				Picker picker = interactorParent.GetNodeOrNull<Picker>("Picker");
+				Pickable pickable = interactiveParent.GetNodeOrNull<Pickable>("Pickable");
+
+				if (picker != null && pickable != null)
+				{
+					return picker.MayDoPick(pickable);
+				}
+			}
+			return false;
+		}
+
+		private bool MayDoChop(List<Interactive> interactives, Interactor interactor)
+		{
+			var parent = interactor.GetParent();
+			if (parent == null) return false;
+
+			Faller faller = parent.GetNodeOrNull<Faller>("Faller");
+			if (faller == null) return false;
+
+			foreach (var interactive in interactives)
+			{
+				var interactiveParent = interactive.GetParent();
+				if (interactiveParent == null) continue;
+
 				Cuttable cuttable = interactiveParent.GetNodeOrNull<Cuttable>("Cuttable");
 				if (cuttable != null)
 				{
-					faller.MayPlayChopAnimation(cuttable);
+					return faller.MayPlayChopAnimation(cuttable);
 				}
 			}
+
+			return false;
 		}
 
-		private void MayDoPlow(InteractEventHandlerParams @params, Interactor interactor)
+		private bool MayDoPlow(List<Interactive> interactives, Interactor interactor)
 		{
 			var parent = interactor.GetParent();
-			if (parent == null) return;
+			if (parent == null) return false;
 
 			Farmer farmer = parent.GetNodeOrNull<Farmer>("Farmer");
-			if (farmer == null) return;
+			if (farmer == null) return false;
 
 			farmer.PlayPlowAnimation();
-		}
 
-		private void MayOpenChest(InteractEventHandlerParams @params, Interactor interactor)
-		{
-			var parent = interactor.GetParent();
-			if (parent == null) return;
-
-			foreach (var interactive in @params.interactivesInRange)
-			{
-				var interactiveParent = interactive.GetParent();
-				if (interactiveParent is Chest chest)
-				{
-					chest.PlayOpenAnimation();
-				}
-			}
+			return true;
 		}
 
 		// UI更新部分

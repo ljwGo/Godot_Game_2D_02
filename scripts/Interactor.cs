@@ -25,30 +25,30 @@ namespace Game
 		public override void _UnhandledInput(InputEvent @event)
 		{
 			// 只有当鼠标点击没被 UI 拦截时，这里才会运行
-			if (@event.IsActionPressed("interact"))
-			{
-				EmitSignal(SignalName.Interact, new InteractEventHandlerParams { interactivesInRange = interactivesInRange }, this);
-			}
+			// if (@event.IsActionPressed("interact"))
+			// {
+			// 	EmitSignal(SignalName.Interact, new InteractEventHandlerParams { interactivesInRange = interactivesInRange }, this);
+			// }
 		}
 
 		private void OnAreaEntered(Area2D area)
 		{
-			Interactive interactive = area.GetNodeOrNull<Interactive>(".");
-			if (interactive != null)
-			{
-				interactivesInRange.Add(interactive);
-				GD.Print($"Entered interactive: {interactive.Name}");
-			}
+			// Interactive interactive = area.GetNodeOrNull<Interactive>(".");
+			// if (interactive != null)
+			// {
+			// 	interactivesInRange.Add(interactive);
+			// 	GD.Print($"Entered interactive: {interactive.Name}");
+			// }
 		}
 
 		private void OnAreaExited(Area2D area)
 		{
-			Interactive interactive = area.GetNodeOrNull<Interactive>(".");
-			if (interactive != null)
-			{
-				interactivesInRange.Remove(interactive);
-				GD.Print($"Exited interactive: {interactive.Name}");
-			}
+			// Interactive interactive = area.GetNodeOrNull<Interactive>(".");
+			// if (interactive != null)
+			// {
+			// 	interactivesInRange.Remove(interactive);
+			// 	GD.Print($"Exited interactive: {interactive.Name}");
+			// }
 		}
 	}
 }

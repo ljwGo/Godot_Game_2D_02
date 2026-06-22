@@ -15,6 +15,8 @@ namespace Game
 	{
 		[Export] public float ShowSpeed = 0.02f;
 
+		public bool AutoPlayMode = false;
+
 		DialogGraphics dialogGraphics;
 		DialogContainer dialogContainer;
 
@@ -142,14 +144,26 @@ namespace Game
 
 		public void OnTextAllDisplayed()
 		{
-			if (!dialogGraphics.HasNeighbour(0)) return;
+			if (!dialogGraphics.HasNeighbour(0)) {
+				if (AutoPlayMode) {
+					dialogContainer.Close();
+				}
+				return;
+			}
 
 			DialogNodeType nodeType = dialogGraphics.CurrentNode.type;
 			switch (nodeType)
 			{
 				case DialogNodeType.Normal:
-					dialogContainer.HideChoices();
-					dialogContainer.ShowNextIndicate();
+					if (AutoPlayMode)
+					{
+						Next(0);
+					}
+					else
+					{
+						dialogContainer.HideChoices();
+						dialogContainer.ShowNextIndicate();
+					}
 					break;
 				case DialogNodeType.Choice:
 					dialogContainer.ShowChoices();

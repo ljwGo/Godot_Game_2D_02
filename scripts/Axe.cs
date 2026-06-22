@@ -19,6 +19,7 @@ public partial class Axe : Node2D
     var dialogGraphics = new DialogGraphics(node);
 
     dialogManager.OpenDialog();
+    // dialogManager.AutoPlayMode = true;
     dialogManager.NewDialog(dialogGraphics);
   }
 
@@ -28,6 +29,7 @@ public partial class Axe : Node2D
     var dialogGraphics = new DialogGraphics(node);
 
     dialogManager.OpenDialog();
+    // dialogManager.AutoPlayMode = true;
     dialogManager.NewDialog(dialogGraphics);
   }
 }

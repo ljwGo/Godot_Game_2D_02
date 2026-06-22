@@ -11,7 +11,7 @@ public partial class Picker : Node
   [Signal] public delegate void PickEventHandler(Picker picker, Pickable pickable);
   [Signal] public delegate void NotPickEventHandler(Picker picker, Pickable pickable, string result);
 
-  public void MayDoPick(Pickable pickable)
+  public bool MayDoPick(Pickable pickable)
   {
     if (CanPick(pickable) && pickable.CanPick(this)) {
       EmitSignal(SignalName.Pick, this, pickable);
@@ -22,5 +22,6 @@ public partial class Picker : Node
       EmitSignal(SignalName.NotPick, this, pickable, result);
       pickable.EmitSignal(Pickable.SignalName.NotBePicked, this, pickable, result);
     }
+    return true;
   }
 }
