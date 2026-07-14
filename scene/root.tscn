@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=4 uid="uid://bx275i012lm3i"]
+[gd_scene load_steps=54 format=4 uid="uid://bx275i012lm3i"]
 
 [ext_resource type="TileSet" uid="uid://cfiqxdctej66w" path="res://tres/floor.tres" id="1_b8pkg"]
 [ext_resource type="PackedScene" uid="uid://du5eumro16dyo" path="res://scene/player.tscn" id="2_soann"]
@@ -20,6 +20,10 @@
 [ext_resource type="Texture2D" uid="uid://c7x43vf0yevgw" path="res://assets/Sprout Lands - UI Pack - Basic pack/Sprite sheets/Dialouge UI/Premade dialog box small.png" id="15_65jmh"]
 [ext_resource type="Script" uid="uid://rnj37sdde2lc" path="res://scripts/UI/DialogContainer.cs" id="15_fn8lc"]
 [ext_resource type="FontFile" uid="uid://c8amdyg2u5cxm" path="res://assets/Sprout Lands - UI Pack - Basic pack/fonts/pixelFont-7-8x14-sproutLands.ttf" id="16_65jmh"]
+[ext_resource type="Texture2D" uid="uid://bgxyk8toeypao" path="res://tres/UI/avatar/cat.tres" id="18_6ckq1"]
+[ext_resource type="Texture2D" uid="uid://of6fibensvw7" path="res://assets/Sprout Lands - UI Pack - Basic pack/Sprite sheets/Icons/special icons/Special Icons.png" id="20_s2s38"]
+[ext_resource type="FontFile" uid="uid://csqonkf3b8b24" path="res://assets/Ninja Adventure - Asset Pack/Ui/Font/NormalFont.ttf" id="21_q6d23"]
+[ext_resource type="Texture2D" uid="uid://b5p6daybgqw7l" path="res://assets/Sprout Lands - UI Pack - Basic pack/emojis-free/Emoji_Spritesheet_Free.png" id="22_nkpe3"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_evhkr"]
 texture = ExtResource("5_ax07c")
@@ -467,6 +471,7 @@ texture_margin_bottom = 8.0
 region_rect = Rect2(7.8066025, 6.7465057, 48.192917, 48.57846)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wghl8"]
+atlas = ExtResource("18_6ckq1")
 region = Rect2(0, 0, 32, 32)
 
 [sub_resource type="LabelSettings" id="LabelSettings_fn8lc"]
@@ -475,6 +480,59 @@ font_size = 12
 font_color = Color(0.18000486, 0.18000486, 0.18000486, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6ckq1"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_s2s38"]
+load_path = "res://.godot/imported/Special Icons.png-d0ca8a92c2f9d3451e22daf6c5ab7022.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nkpe3"]
+atlas = SubResource("CompressedTexture2D_s2s38")
+region = Rect2(52, 19, 9, 9)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q6d23"]
+atlas = ExtResource("20_s2s38")
+region = Rect2(52, 19, 9, 9)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q6d23"]
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nkpe3"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0, 1, 0, 0.4)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+corner_detail = 6
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hsllc"]
+atlas = ExtResource("22_nkpe3")
+region = Rect2(32, 256, 32, 32)
+
+[sub_resource type="LabelSettings" id="LabelSettings_kyv6f"]
+font = ExtResource("21_q6d23")
+font_color = Color(1, 0.8000001, 0, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kyv6f"]
+atlas = ExtResource("22_nkpe3")
+region = Rect2(128, 256, 32, 32)
+
+[sub_resource type="LabelSettings" id="LabelSettings_nkpe3"]
+font = ExtResource("21_q6d23")
+font_color = Color(0, 0.5647059, 1, 1)
 
 [node name="Root" type="Node2D"]
 metadata/_edit_vertical_guides_ = [288.0]
@@ -738,6 +796,107 @@ horizontal_alignment = 1
 vertical_alignment = 1
 clip_text = true
 text_overrun_behavior = 3
+
+[node name="StatusBar" type="VBoxContainer" parent="CanvasLayer/Control/UI"]
+layout_mode = 2
+
+[node name="AvatarAHeart" type="HBoxContainer" parent="CanvasLayer/Control/UI/StatusBar"]
+layout_mode = 2
+
+[node name="Avatar" type="PanelContainer" parent="CanvasLayer/Control/UI/StatusBar/AvatarAHeart"]
+custom_minimum_size = Vector2(80, 80)
+layout_direction = 4
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_d4m4s")
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control/UI/StatusBar/AvatarAHeart/Avatar"]
+layout_mode = 2
+texture = SubResource("AtlasTexture_wghl8")
+
+[node name="Status" type="MarginContainer" parent="CanvasLayer/Control/UI/StatusBar/AvatarAHeart"]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/UI/StatusBar/AvatarAHeart/Status"]
+layout_mode = 2
+
+[node name="HeartBox" type="HBoxContainer" parent="CanvasLayer/Control/UI/StatusBar/AvatarAHeart/Status/VBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control/UI/StatusBar/AvatarAHeart/Status/VBoxContainer/HeartBox"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = SubResource("AtlasTexture_nkpe3")
+
+[node name="TextureRect2" type="TextureRect" parent="CanvasLayer/Control/UI/StatusBar/AvatarAHeart/Status/VBoxContainer/HeartBox"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = SubResource("AtlasTexture_q6d23")
+
+[node name="TextureRect3" type="TextureRect" parent="CanvasLayer/Control/UI/StatusBar/AvatarAHeart/Status/VBoxContainer/HeartBox"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = SubResource("AtlasTexture_q6d23")
+
+[node name="TextureRect4" type="TextureRect" parent="CanvasLayer/Control/UI/StatusBar/AvatarAHeart/Status/VBoxContainer/HeartBox"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = SubResource("AtlasTexture_q6d23")
+
+[node name="TextureRect5" type="TextureRect" parent="CanvasLayer/Control/UI/StatusBar/AvatarAHeart/Status/VBoxContainer/HeartBox"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = SubResource("AtlasTexture_q6d23")
+
+[node name="TextureRect6" type="TextureRect" parent="CanvasLayer/Control/UI/StatusBar/AvatarAHeart/Status/VBoxContainer/HeartBox"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = SubResource("AtlasTexture_q6d23")
+
+[node name="ProgressBar" type="ProgressBar" parent="CanvasLayer/Control/UI/StatusBar/AvatarAHeart/Status/VBoxContainer"]
+custom_minimum_size = Vector2(200, 20)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("21_q6d23")
+theme_override_styles/background = SubResource("StyleBoxFlat_q6d23")
+theme_override_styles/fill = SubResource("StyleBoxFlat_nkpe3")
+value = 100.0
+
+[node name="CoinADiamond" type="MarginContainer" parent="CanvasLayer/Control/UI/StatusBar"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_right = 15
+
+[node name="HBox" type="HBoxContainer" parent="CanvasLayer/Control/UI/StatusBar/CoinADiamond"]
+layout_mode = 2
+
+[node name="CoinBox" type="HBoxContainer" parent="CanvasLayer/Control/UI/StatusBar/CoinADiamond/HBox"]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control/UI/StatusBar/CoinADiamond/HBox/CoinBox"]
+layout_mode = 2
+texture = SubResource("AtlasTexture_hsllc")
+
+[node name="Label" type="Label" parent="CanvasLayer/Control/UI/StatusBar/CoinADiamond/HBox/CoinBox"]
+layout_mode = 2
+text = "10"
+label_settings = SubResource("LabelSettings_kyv6f")
+
+[node name="CoinBox2" type="HBoxContainer" parent="CanvasLayer/Control/UI/StatusBar/CoinADiamond/HBox"]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control/UI/StatusBar/CoinADiamond/HBox/CoinBox2"]
+layout_mode = 2
+texture = SubResource("AtlasTexture_kyv6f")
+
+[node name="Label" type="Label" parent="CanvasLayer/Control/UI/StatusBar/CoinADiamond/HBox/CoinBox2"]
+layout_mode = 2
+text = "16"
+label_settings = SubResource("LabelSettings_nkpe3")
 
 [node name="ManagerContainer" type="Node" parent="."]
 unique_name_in_owner = true
