@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=4 uid="uid://bx275i012lm3i"]
+[gd_scene load_steps=56 format=4 uid="uid://bx275i012lm3i"]
 
 [ext_resource type="TileSet" uid="uid://cfiqxdctej66w" path="res://tres/floor.tres" id="1_b8pkg"]
 [ext_resource type="PackedScene" uid="uid://du5eumro16dyo" path="res://scene/player.tscn" id="2_soann"]
@@ -21,9 +21,13 @@
 [ext_resource type="Script" uid="uid://rnj37sdde2lc" path="res://scripts/UI/DialogContainer.cs" id="15_fn8lc"]
 [ext_resource type="FontFile" uid="uid://c8amdyg2u5cxm" path="res://assets/Sprout Lands - UI Pack - Basic pack/fonts/pixelFont-7-8x14-sproutLands.ttf" id="16_65jmh"]
 [ext_resource type="Texture2D" uid="uid://bgxyk8toeypao" path="res://tres/UI/avatar/cat.tres" id="18_6ckq1"]
-[ext_resource type="Texture2D" uid="uid://of6fibensvw7" path="res://assets/Sprout Lands - UI Pack - Basic pack/Sprite sheets/Icons/special icons/Special Icons.png" id="20_s2s38"]
+[ext_resource type="Script" uid="uid://tcc20wrrrsim" path="res://scripts/UI/StatusBar.cs" id="20_fe7go"]
+[ext_resource type="Texture2D" uid="uid://dtoj7rsfgwhnj" path="res://tres/UI/full_heart.tres" id="20_hsllc"]
+[ext_resource type="Texture2D" uid="uid://bnmbb1glylynt" path="res://tres/UI/half_heart.tres" id="21_kyv6f"]
 [ext_resource type="FontFile" uid="uid://csqonkf3b8b24" path="res://assets/Ninja Adventure - Asset Pack/Ui/Font/NormalFont.ttf" id="21_q6d23"]
+[ext_resource type="Texture2D" uid="uid://dme1vfav682ee" path="res://tres/UI/empty_heart.tres" id="22_fe7go"]
 [ext_resource type="Texture2D" uid="uid://b5p6daybgqw7l" path="res://assets/Sprout Lands - UI Pack - Basic pack/emojis-free/Emoji_Spritesheet_Free.png" id="22_nkpe3"]
+[ext_resource type="FontFile" uid="uid://dslf1ps3ape0p" path="res://tres/Font/main.tres" id="25_baidt"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_evhkr"]
 texture = ExtResource("5_ax07c")
@@ -481,30 +485,21 @@ font_color = Color(0.18000486, 0.18000486, 0.18000486, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6ckq1"]
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_s2s38"]
-load_path = "res://.godot/imported/Special Icons.png-d0ca8a92c2f9d3451e22daf6c5ab7022.ctex"
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_nkpe3"]
-atlas = SubResource("CompressedTexture2D_s2s38")
-region = Rect2(52, 19, 9, 9)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_q6d23"]
-atlas = ExtResource("20_s2s38")
-region = Rect2(52, 19, 9, 9)
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q6d23"]
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
+bg_color = Color(0.63407254, 0.59430075, 0.5396818, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.97071606, 0.61221933, 0.39600003, 1)
 corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
-expand_margin_left = 2.0
-expand_margin_top = 2.0
-expand_margin_right = 2.0
-expand_margin_bottom = 2.0
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nkpe3"]
 content_margin_left = 2.0
@@ -517,6 +512,9 @@ corner_radius_top_right = 1
 corner_radius_bottom_right = 1
 corner_radius_bottom_left = 1
 corner_detail = 6
+
+[sub_resource type="LabelSettings" id="LabelSettings_fe7go"]
+font = ExtResource("25_baidt")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hsllc"]
 atlas = ExtResource("22_nkpe3")
@@ -799,6 +797,13 @@ text_overrun_behavior = 3
 
 [node name="StatusBar" type="VBoxContainer" parent="CanvasLayer/Control/UI"]
 layout_mode = 2
+script = ExtResource("20_fe7go")
+CurrentHealth = 1
+CurrentStamina = 10
+MaxStamina = 150
+FullHeartResource = ExtResource("20_hsllc")
+HalfHeartResource = ExtResource("21_kyv6f")
+EmptyHeartResource = ExtResource("22_fe7go")
 
 [node name="AvatarAHeart" type="HBoxContainer" parent="CanvasLayer/Control/UI/StatusBar"]
 layout_mode = 2
@@ -820,49 +825,42 @@ layout_mode = 2
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/UI/StatusBar/AvatarAHeart/Status"]
+[node name="HeartAProgress" type="VBoxContainer" parent="CanvasLayer/Control/UI/StatusBar/AvatarAHeart/Status"]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="HeartBox" type="HBoxContainer" parent="CanvasLayer/Control/UI/StatusBar/AvatarAHeart/Status/VBoxContainer"]
+[node name="HeartBox" type="HBoxContainer" parent="CanvasLayer/Control/UI/StatusBar/AvatarAHeart/Status/HeartAProgress"]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control/UI/StatusBar/AvatarAHeart/Status/VBoxContainer/HeartBox"]
+[node name="Heart" type="TextureRect" parent="CanvasLayer/Control/UI/StatusBar/AvatarAHeart/Status/HeartAProgress/HeartBox"]
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
-texture = SubResource("AtlasTexture_nkpe3")
+texture = ExtResource("20_hsllc")
 
-[node name="TextureRect2" type="TextureRect" parent="CanvasLayer/Control/UI/StatusBar/AvatarAHeart/Status/VBoxContainer/HeartBox"]
-custom_minimum_size = Vector2(24, 24)
-layout_mode = 2
-texture = SubResource("AtlasTexture_q6d23")
-
-[node name="TextureRect3" type="TextureRect" parent="CanvasLayer/Control/UI/StatusBar/AvatarAHeart/Status/VBoxContainer/HeartBox"]
-custom_minimum_size = Vector2(24, 24)
-layout_mode = 2
-texture = SubResource("AtlasTexture_q6d23")
-
-[node name="TextureRect4" type="TextureRect" parent="CanvasLayer/Control/UI/StatusBar/AvatarAHeart/Status/VBoxContainer/HeartBox"]
-custom_minimum_size = Vector2(24, 24)
-layout_mode = 2
-texture = SubResource("AtlasTexture_q6d23")
-
-[node name="TextureRect5" type="TextureRect" parent="CanvasLayer/Control/UI/StatusBar/AvatarAHeart/Status/VBoxContainer/HeartBox"]
-custom_minimum_size = Vector2(24, 24)
-layout_mode = 2
-texture = SubResource("AtlasTexture_q6d23")
-
-[node name="TextureRect6" type="TextureRect" parent="CanvasLayer/Control/UI/StatusBar/AvatarAHeart/Status/VBoxContainer/HeartBox"]
-custom_minimum_size = Vector2(24, 24)
-layout_mode = 2
-texture = SubResource("AtlasTexture_q6d23")
-
-[node name="ProgressBar" type="ProgressBar" parent="CanvasLayer/Control/UI/StatusBar/AvatarAHeart/Status/VBoxContainer"]
+[node name="ProgressBar" type="ProgressBar" parent="CanvasLayer/Control/UI/StatusBar/AvatarAHeart/Status/HeartAProgress"]
 custom_minimum_size = Vector2(200, 20)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("21_q6d23")
 theme_override_styles/background = SubResource("StyleBoxFlat_q6d23")
 theme_override_styles/fill = SubResource("StyleBoxFlat_nkpe3")
 value = 100.0
+show_percentage = false
+
+[node name="Label" type="Label" parent="CanvasLayer/Control/UI/StatusBar/AvatarAHeart/Status/HeartAProgress/ProgressBar"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "10/20"
+label_settings = SubResource("LabelSettings_fe7go")
 
 [node name="CoinADiamond" type="MarginContainer" parent="CanvasLayer/Control/UI/StatusBar"]
 layout_mode = 2
@@ -870,6 +868,7 @@ theme_override_constants/margin_left = 15
 theme_override_constants/margin_right = 15
 
 [node name="HBox" type="HBoxContainer" parent="CanvasLayer/Control/UI/StatusBar/CoinADiamond"]
+visible = false
 layout_mode = 2
 
 [node name="CoinBox" type="HBoxContainer" parent="CanvasLayer/Control/UI/StatusBar/CoinADiamond/HBox"]
