@@ -1,6 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://djom0sk108xnr"]
+[gd_scene load_steps=4 format=3 uid="uid://nkaovkg1qd53"]
 
-[ext_resource type="PackedScene" uid="uid://n6gu2nloxy2g" path="res://scene/pickable_loot.tscn" id="1_jlmk3"]
+[ext_resource type="PackedScene" uid="uid://5ystchq5x05b" path="res://scene/pickable_loot.tscn" id="1_jlmk3"]
 [ext_resource type="Texture2D" uid="uid://dm2ugkjjprjva" path="res://assets/Sprout Lands - Sprites - Basic pack/Objects/Basic tools and meterials.png" id="2_j735s"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sdj5r"]

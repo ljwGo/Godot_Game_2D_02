@@ -797,6 +797,7 @@ text_overrun_behavior = 3
 
 [node name="StatusBar" type="VBoxContainer" parent="CanvasLayer/Control/UI"]
 layout_mode = 2
+mouse_filter = 2
 script = ExtResource("20_fe7go")
 CurrentHealth = 1
 CurrentStamina = 10
@@ -807,6 +808,7 @@ EmptyHeartResource = ExtResource("22_fe7go")
 
 [node name="AvatarAHeart" type="HBoxContainer" parent="CanvasLayer/Control/UI/StatusBar"]
 layout_mode = 2
+size_flags_horizontal = 0
 
 [node name="Avatar" type="PanelContainer" parent="CanvasLayer/Control/UI/StatusBar/AvatarAHeart"]
 custom_minimum_size = Vector2(80, 80)
@@ -864,6 +866,7 @@ label_settings = SubResource("LabelSettings_fe7go")
 
 [node name="CoinADiamond" type="MarginContainer" parent="CanvasLayer/Control/UI/StatusBar"]
 layout_mode = 2
+size_flags_horizontal = 0
 theme_override_constants/margin_left = 15
 theme_override_constants/margin_right = 15
 

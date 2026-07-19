@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://cu32gn45ehex8"]
+[gd_scene load_steps=3 format=3 uid="uid://cc1nr1hx5c6h1"]
 
-[ext_resource type="PackedScene" uid="uid://n6gu2nloxy2g" path="res://scene/pickable_loot.tscn" id="1_sakr1"]
+[ext_resource type="PackedScene" uid="uid://5ystchq5x05b" path="res://scene/pickable_loot.tscn" id="1_sakr1"]
 [ext_resource type="Script" uid="uid://lancqq8dail" path="res://scripts/Axe.cs" id="2_tqov3"]
 
 [node name="AXE" instance=ExtResource("1_sakr1")]
